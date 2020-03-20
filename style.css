@@ -61,6 +61,8 @@ body
 
 .dropdown:hover .dropdown-content { display: block;}
 
+.dropdown:hover .dropbtn {background-color: green;}
+
 @keyframes fadeIn
 {
 0% { opacity: 0;}
