@@ -54,7 +54,8 @@ body
 .dropdown-content a
 {
     color: white;
-    padding: 1em;
+    font-family: Helvetica, Verdana, Tahoma, sans-serif;
+    padding: 1.5em;
     text-decoration: none;
     display: block;
 }
