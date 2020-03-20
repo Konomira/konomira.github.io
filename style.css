@@ -9,7 +9,6 @@ h1
 
 .header-image
 {
-    border-radius: 1em;
     max-width: 100%;
     height: auto;
     filter: blur(2px), saturate(3);
