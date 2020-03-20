@@ -20,6 +20,38 @@ body
     background-color: rgb(63, 66, 70);
 }
 
+.dropbtn
+{
+    background-color: dimgrey;
+    color: white;
+    padding: 1.5em;
+    font-size: 1.5em;
+    border: none;
+}
+
+.dropdown
+{
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content
+{
+    display: none;
+    position: absolute;
+    background-color: grey;
+    min-width: 5em;
+    z-index: 1;
+}
+
+.dropdown-content a
+{
+    color: white;
+    padding: 1em;
+    text-decoration: none;
+    display: block;
+}
+
 @keyframes fadeIn
 {
 0% { opacity: 0;}
