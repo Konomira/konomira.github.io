@@ -58,6 +58,8 @@ body
     display: block;
 }
 
+.dropdown:hover .dropdown-content { display: block;}
+
 @keyframes fadeIn
 {
 0% { opacity: 0;}
