@@ -12,6 +12,13 @@ h1
     animation: fadeIn ease 4s;
 }
 
+.faceprofile
+{
+    object-fit: cover;
+    width: 30%;
+    height: auto;
+}
+
 .header-image
 {
     max-width: 100%;
@@ -28,7 +35,6 @@ body
 
 .dropbtn
 {
-    width: 100%;
     background-color: dimgrey;
     color: white;
     padding: 1.5em;
