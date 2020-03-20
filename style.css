@@ -7,7 +7,7 @@ h1
 {
     text-align:center;
     font-size: 3em;
-    font-style: Helvetica;
+    font-family: Helvetica, Verdana, Tahoma, sans-serif;
     color: white;
     animation: fadeIn ease 4s;
 }
