@@ -1,3 +1,8 @@
+:root
+{
+ --main-bg-color: rgb(63, 66, 70);
+}
+
 h1
 {
     text-align:center;
@@ -13,11 +18,12 @@ h1
     height: auto;
     filter: blur(2px), saturate(3);
     animation: fadeIn ease 3s;
+    box-shadow: 0 0 1em 1em var(--main-bg-color);
 }
 
 body
 {
-    background-color: rgb(63, 66, 70);
+    background-color: var(--main-bg-color);
 }
 
 .dropbtn
