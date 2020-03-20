@@ -28,7 +28,7 @@ body
 
 .dropbtn
 {
-    max-width: 100%;
+    width: 100%;
     background-color: dimgrey;
     color: white;
     padding: 1.5em;
