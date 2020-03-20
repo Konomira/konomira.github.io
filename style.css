@@ -2,3 +2,10 @@ h1{
     text-align:center;
     font-size: 3em;
 }
+
+.header-image {
+    border-radius: 1em;
+    max-width: 100%;
+    height: auto;
+    filter: blur(2px), saturate(3);
+}
