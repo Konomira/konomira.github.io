@@ -9,3 +9,7 @@ h1{
     height: auto;
     filter: blur(2px), saturate(3);
 }
+
+body{
+    background-color: darkslategrey;
+}
