@@ -33,6 +33,11 @@ h1
     display:block;
 }
 
+.nav-buttons
+{
+    display: block-inline;
+}
+
 body
 {
     background-color: var(--main-bg-color);
