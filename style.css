@@ -18,7 +18,10 @@ h1
     width: 200px;
     height: 200px;
 }
-
+.title
+{
+    display: block-inline;
+}
 .header-image
 {
     width: 100%;
