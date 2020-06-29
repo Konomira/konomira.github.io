@@ -35,6 +35,7 @@ body
 
 .dropbtn
 {
+    clear: left;
     background-color: dimgrey;
     color: white;
     padding: 1.5em;
