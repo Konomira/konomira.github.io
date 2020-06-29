@@ -22,7 +22,7 @@ h1
 .header-image
 {
     max-width: 100%;
-    height: auto;
+    height: 200px;
     filter: blur(2px), saturate(3);
     animation: fadeIn ease 3s;
     box-shadow: 0 0 1em 1em var(--main-bg-color);
