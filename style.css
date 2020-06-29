@@ -27,6 +27,7 @@ h1
     filter: blur(2px), saturate(3);
     animation: fadeIn ease 3s;
     box-shadow: 0 0 1em 1em var(--main-bg-color);
+    display:block;
 }
 
 body
