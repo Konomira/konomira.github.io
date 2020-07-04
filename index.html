@@ -19,7 +19,7 @@
 					<p class="box-body">See a collection of my work on open source projects here</p>
 				</a>
 
-				<a class="box box1 slide" name="itch" href="https://konomira.itch.io/" target="_blank">
+				<a class="box box1 slide slide0" name="itch" href="https://konomira.itch.io/" target="_blank">
 					<div class="show-on-hover"></div>
 					<h2 class="box-title">itch.io</h2>
 					<p class="box-body">Small prototypes and game jam archives</p>
@@ -63,17 +63,16 @@
 			var slideIndex = 0;
 			showSlides();
 
-			function showSlides() {
-			  var i;
-			  var slides = document.getElementsByClassName("slide");
-			  for (i = 0; i < slides.length; i++) {
-				slides[i].style.display = "none";  
-			  }
-			  slideIndex++;
-			  if (slideIndex > slides.length) {slideIndex = 1}    
-			  slides[slideIndex-1].style.display = "block";  
-			  dots[slideIndex-1].className += " active slide" + slideIndex-1;
-			  setTimeout(showSlides, 2000); // Change image every 2 seconds
+			function showSlides() 
+			{
+				var slide = document.getElementsByClassName("slide");
+				if (slideIndex > 2) {slideIndex = 0}    
+				slide[0].classList.remove("slide0");
+				slide[0].classList.remove("slide1");
+				slide[0].classList.remove("slide2");
+				slide[0].classList.add("slide" + (slideIndex).toString());
+				slideIndex++;
+				setTimeout(showSlides, 3500); // Change image every 2 seconds
 			}
 		</script>
 	</body>
