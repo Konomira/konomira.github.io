@@ -3353,6 +3353,10 @@ __ATINIT__.push({
  })
 }, {
  func: (function() {
+  __GLOBAL__sub_I_Il2CppCodeRegistration_cpp();
+ })
+}, {
+ func: (function() {
   __GLOBAL__sub_I_Lump_libil2cpp_metadata_cpp();
  })
 }, {
@@ -3362,10 +3366,6 @@ __ATINIT__.push({
 }, {
  func: (function() {
   __GLOBAL__sub_I_Lump_libil2cpp_gc_cpp();
- })
-}, {
- func: (function() {
-  __GLOBAL__sub_I_Il2CppCodeRegistration_cpp();
  })
 }, {
  func: (function() {
@@ -9574,9 +9574,8 @@ var Browser = {
     h = Math.round(w / Module["forcedAspectRatio"]);
    }
   }
-  var dpr = window.hbxDpr;
   if ((document["fullscreenElement"] || document["mozFullScreenElement"] || document["msFullscreenElement"] || document["webkitFullscreenElement"] || document["webkitCurrentFullScreenElement"]) === canvas.parentNode && typeof screen != "undefined") {
-   var factor = Math.min((screen.width*dpr) / w, (screen.height*dpr) / h);
+   var factor = Math.min(screen.width / w, screen.height / h);
    w = Math.round(w * factor);
    h = Math.round(h * factor);
   }
@@ -9591,8 +9590,13 @@ var Browser = {
    if (canvas.width != wNative) canvas.width = wNative;
    if (canvas.height != hNative) canvas.height = hNative;
    if (typeof canvas.style != "undefined") {
-     if(!canvas.style.getPropertyValue("width").includes("%"))canvas.style.setProperty("width", (w/dpr) + "px", "important");
-     if(!canvas.style.getPropertyValue("height").includes("%"))canvas.style.setProperty("height", (h/dpr) + "px", "important");
+    if (w != wNative || h != hNative) {
+     canvas.style.setProperty("width", w + "px", "important");
+     canvas.style.setProperty("height", h + "px", "important");
+    } else {
+     canvas.style.removeProperty("width");
+     canvas.style.removeProperty("height");
+    }
    }
   }
  }),
@@ -9883,39 +9887,38 @@ var JSEvents = {
   };
  }),
  fillMouseEventData: (function(eventStruct, e, target) {
-  var devicePixelRatio = window.hbxDpr;
   HEAPF64[eventStruct >> 3] = JSEvents.tick();
-  HEAP32[eventStruct + 8 >> 2] = e.screenX*devicePixelRatio;
-  HEAP32[eventStruct + 12 >> 2] = e.screenY*devicePixelRatio;
-  HEAP32[eventStruct + 16 >> 2] = e.clientX*devicePixelRatio;
-  HEAP32[eventStruct + 20 >> 2] = e.clientY*devicePixelRatio;
+  HEAP32[eventStruct + 8 >> 2] = e.screenX;
+  HEAP32[eventStruct + 12 >> 2] = e.screenY;
+  HEAP32[eventStruct + 16 >> 2] = e.clientX;
+  HEAP32[eventStruct + 20 >> 2] = e.clientY;
   HEAP32[eventStruct + 24 >> 2] = e.ctrlKey;
   HEAP32[eventStruct + 28 >> 2] = e.shiftKey;
   HEAP32[eventStruct + 32 >> 2] = e.altKey;
   HEAP32[eventStruct + 36 >> 2] = e.metaKey;
   HEAP16[eventStruct + 40 >> 1] = e.button;
   HEAP16[eventStruct + 42 >> 1] = e.buttons;
-  HEAP32[eventStruct + 44 >> 2] = e["movementX"] || e["mozMovementX"] || e["webkitMovementX"] || (e.screenX*devicePixelRatio) - JSEvents.previousScreenX;
-  HEAP32[eventStruct + 48 >> 2] = e["movementY"] || e["mozMovementY"] || e["webkitMovementY"] || (e.screenY*devicePixelRatio) - JSEvents.previousScreenY;
+  HEAP32[eventStruct + 44 >> 2] = e["movementX"] || e["mozMovementX"] || e["webkitMovementX"] || e.screenX - JSEvents.previousScreenX;
+  HEAP32[eventStruct + 48 >> 2] = e["movementY"] || e["mozMovementY"] || e["webkitMovementY"] || e.screenY - JSEvents.previousScreenY;
   if (Module["canvas"]) {
    var rect = Module["canvas"].getBoundingClientRect();
-   HEAP32[eventStruct + 60 >> 2] = (e.clientX - rect.left) * devicePixelRatio;
-   HEAP32[eventStruct + 64 >> 2] = (e.clientY - rect.top) * devicePixelRatio;
+   HEAP32[eventStruct + 60 >> 2] = e.clientX - rect.left;
+   HEAP32[eventStruct + 64 >> 2] = e.clientY - rect.top;
   } else {
    HEAP32[eventStruct + 60 >> 2] = 0;
    HEAP32[eventStruct + 64 >> 2] = 0;
   }
   if (target) {
    var rect = JSEvents.getBoundingClientRectOrZeros(target);
-   HEAP32[eventStruct + 52 >> 2] = (e.clientX - rect.left) * devicePixelRatio;
-   HEAP32[eventStruct + 56 >> 2] = (e.clientY - rect.top) * devicePixelRatio;
+   HEAP32[eventStruct + 52 >> 2] = e.clientX - rect.left;
+   HEAP32[eventStruct + 56 >> 2] = e.clientY - rect.top;
   } else {
    HEAP32[eventStruct + 52 >> 2] = 0;
    HEAP32[eventStruct + 56 >> 2] = 0;
   }
   if (e.type !== "wheel" && e.type !== "mousewheel") {
-   JSEvents.previousScreenX = e.screenX*devicePixelRatio;
-   JSEvents.previousScreenY = e.screenY*devicePixelRatio;
+   JSEvents.previousScreenX = e.screenX;
+   JSEvents.previousScreenY = e.screenY;
   }
  }),
  registerMouseEventCallback: (function(target, userData, useCapture, callbackfunc, eventTypeId, eventTypeString, targetThread) {
@@ -10155,8 +10158,8 @@ var JSEvents = {
   stringToUTF8(id, eventStruct + 136, 128);
   HEAP32[eventStruct + 264 >> 2] = reportedElement ? reportedElement.clientWidth : 0;
   HEAP32[eventStruct + 268 >> 2] = reportedElement ? reportedElement.clientHeight : 0;
-  HEAP32[eventStruct + 272 >> 2] = screen.width * window.hbxDpr;
-  HEAP32[eventStruct + 276 >> 2] = screen.height * window.hbxDpr;
+  HEAP32[eventStruct + 272 >> 2] = screen.width;
+  HEAP32[eventStruct + 276 >> 2] = screen.height;
   if (isFullscreen) {
    JSEvents.previousFullscreenElement = fullscreenElement;
   }
@@ -10374,27 +10377,26 @@ var JSEvents = {
    var canvasRect = Module["canvas"] ? Module["canvas"].getBoundingClientRect() : undefined;
    var targetRect = JSEvents.getBoundingClientRectOrZeros(target);
    var numTouches = 0;
-    var devicePixelRatio = window.hbxDpr;
    for (var i in touches) {
     var t = touches[i];
     HEAP32[ptr >> 2] = t.identifier;
-    HEAP32[ptr + 4 >> 2] = t.screenX*devicePixelRatio;
-    HEAP32[ptr + 8 >> 2] = t.screenY*devicePixelRatio;
-    HEAP32[ptr + 12 >> 2] = t.clientX*devicePixelRatio;
-    HEAP32[ptr + 16 >> 2] = t.clientY*devicePixelRatio;
-    HEAP32[ptr + 20 >> 2] = t.pageX*devicePixelRatio;
-    HEAP32[ptr + 24 >> 2] = t.pageY*devicePixelRatio;
+    HEAP32[ptr + 4 >> 2] = t.screenX;
+    HEAP32[ptr + 8 >> 2] = t.screenY;
+    HEAP32[ptr + 12 >> 2] = t.clientX;
+    HEAP32[ptr + 16 >> 2] = t.clientY;
+    HEAP32[ptr + 20 >> 2] = t.pageX;
+    HEAP32[ptr + 24 >> 2] = t.pageY;
     HEAP32[ptr + 28 >> 2] = t.changed;
     HEAP32[ptr + 32 >> 2] = t.onTarget;
     if (canvasRect) {
-     HEAP32[ptr + 44 >> 2] = (t.clientX - canvasRect.left) * devicePixelRatio;
-     HEAP32[ptr + 48 >> 2] = (t.clientY - canvasRect.top) * devicePixelRatio;
+     HEAP32[ptr + 44 >> 2] = t.clientX - canvasRect.left;
+     HEAP32[ptr + 48 >> 2] = t.clientY - canvasRect.top;
     } else {
      HEAP32[ptr + 44 >> 2] = 0;
      HEAP32[ptr + 48 >> 2] = 0;
     }
-    HEAP32[ptr + 36 >> 2] = (t.clientX - targetRect.left) * devicePixelRatio;
-    HEAP32[ptr + 40 >> 2] = (t.clientY - targetRect.top) * devicePixelRatio;
+    HEAP32[ptr + 36 >> 2] = t.clientX - targetRect.left;
+    HEAP32[ptr + 40 >> 2] = t.clientY - targetRect.top;
     ptr += 52;
     if (++numTouches >= 32) {
      break;
