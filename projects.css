@@ -22,7 +22,7 @@ body {
 	border: 1px solid #252727;
 	text-align: left;
 }
-.tilesWrap img {
+.tilesWrap li img {
 	display: inline-block;
 	width: 20%;
 	min-width: 200px;
