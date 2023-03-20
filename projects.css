@@ -23,7 +23,7 @@ body {
 	text-align: left;
 }
 .tilesWrap li img {
-	display: inline-block;
+	z-index: -1;
 	width: 20%;
 	min-width: 200px;
 	max-width: 230px;
