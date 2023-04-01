@@ -114,8 +114,6 @@ a:visited{
 @media screen and (orientation: landscape)
 {
 
-
-
 	.wrapper{
 		display:grid;
 		grid-template-columns: 435px 435px 435px 435px;
@@ -135,9 +133,7 @@ a:visited{
 
 	.box-body{
 		display: none;
-		padding:3em;
-		font-family:Arial;
-		color: white;
+		color: rgba(0,0,0,0);
 	}
 
 	.box5{
