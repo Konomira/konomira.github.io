@@ -311,40 +311,39 @@
         <p>Built with Unity and C# | 
         <a href="https://github.com/konomira/webdungeon" class="github-link">View on GitHub</a></p>
     </footer>
+	<script>
+		// Unity WebGL loader
+		var canvas = document.querySelector("#unity-canvas");
+		var loadingOverlay = document.querySelector("#loading-overlay");
+		var loadingFill = document.querySelector("#loading-fill");
+		var loadingText = document.querySelector("#loading-text");
 
-    <script>
-        // Unity WebGL loader
-        var canvas = document.querySelector("#unity-canvas");
-        var loadingOverlay = document.querySelector("#loading-overlay");
-        var loadingFill = document.querySelector("#loading-fill");
-        var loadingText = document.querySelector("#loading-text");
+		var buildUrl = "Build";
+		var loaderUrl = buildUrl + "/Builds.loader.js";
+		var config = {
+			dataUrl: buildUrl + "/Builds.data",
+			frameworkUrl: buildUrl + "/Builds.framework.js",
+			codeUrl: buildUrl + "/Builds.wasm",
+			streamingAssetsUrl: "StreamingAssets",
+			companyName: "LewisWhiteman",
+			productName: "WebDungeon",
+			productVersion: "1.0",
+		};
 
-        var buildUrl = "Build";
-        var loaderUrl = buildUrl + "/Builds.loader.js";
-        var config = {
-            dataUrl: buildUrl + "/Builds.data",
-            frameworkUrl: buildUrl + "/Builds.framework.js",
-            codeUrl: buildUrl + "/Builds.wasm",
-            streamingAssetsUrl: "StreamingAssets",
-            companyName: "LewisWhiteman",
-            productName: "WebDungeon",
-            productVersion: "1.0",
-        };
-
-        var script = document.createElement("script");
-        script.src = loaderUrl;
-        script.onload = () => {
-            createUnityInstance(canvas, config, (progress) => {
-                var percent = Math.round(progress * 100);
-                loadingFill.style.width = percent + "%";
-                loadingText.textContent = percent + "%";
-            }).then((unityInstance) => {
-                loadingOverlay.style.display = "none";
-            }).catch((message) => {
-                alert("Failed to load game: " + message);
-            });
-        };
-        document.body.appendChild(script);
-    </script>
+		var script = document.createElement("script");
+		script.src = loaderUrl;
+		script.onload = () => {
+			createUnityInstance(canvas, config, (progress) => {
+				var percent = Math.round(progress * 100);
+				loadingFill.style.width = percent + "%";
+				loadingText.textContent = percent + "%";
+			}).then((unityInstance) => {
+				loadingOverlay.style.display = "none";
+			}).catch((message) => {
+				alert("Failed to load game: " + message);
+			});
+		};
+		document.body.appendChild(script);
+	</script>
 </body>
 </html>
