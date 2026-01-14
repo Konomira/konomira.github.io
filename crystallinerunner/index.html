@@ -103,18 +103,21 @@ main {
 .game-container {
     background: var(--bg-panel);
     border-radius: 14px;
-    padding: 1.2rem;
+    padding: 1rem;
+    margin: 0 auto 2.5rem;
+
+    height: min(80vh, 780px);
+    aspect-ratio: 9 / 16;
+
     box-shadow:
         0 0 40px rgba(0, 246, 255, 0.12),
         inset 0 0 60px rgba(122, 92, 255, 0.05);
-    margin: 0 auto 2.5rem;
-    max-width: 720px;       
 }
 
 .game-wrapper {
     position: relative;
     width: 100%;
-    padding-bottom: 177.78%; /* 9:16 portrait */
+    height: 100%;
     background: #000;
     border-radius: 12px;
     overflow: hidden;
