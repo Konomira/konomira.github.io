@@ -66,36 +66,34 @@ const projectsData = [
         id: 'shoejackcity',
         title: 'ShoeJack City',
         category: ['games', 'leadership'],
-        description: 'Project lead and sole programmer on this 2D real-time action game.',
-        tags: ['Unity', '2D', 'Action Game'],
+        description: 'Project lead and sole programmer on this 2D real-time action game. Successfully delivered complete game development cycle for client.',
+        tags: ['Unity', '2D', 'Action Game', 'Client Project'],
         technologies: 'Unity, C#, 2D Animation',
         role: 'Project Lead & Programmer',
         highlights: [
             'Led complete game development cycle',
             'Implemented real-time action mechanics',
-            '2D animation and art pipeline'
+            '2D animation and art pipeline',
+            'Client-facing project management'
         ],
-        links: {
-            website: 'https://www.shoejackcity.com/'
-        },
+        links: {},
         featured: false
     },
     {
         id: 'vanlifemakeover',
         title: 'VanLife Makeover',
         category: ['games', '3d'],
-        description: 'UX programmer for mobile van customization game on Android and iOS.',
-        tags: ['Unity', 'Mobile', 'UX'],
+        description: 'UX programmer for mobile van customization game on Android and iOS. Successfully delivered cross-platform mobile experience for client.',
+        tags: ['Unity', 'Mobile', 'UX', 'Client Project'],
         technologies: 'Unity, C#, iOS, Android',
         role: 'UX Programmer',
         highlights: [
             'Cross-platform mobile development',
             'Intuitive touch-based UX',
-            'Performance optimization for mobile'
+            'Performance optimization for mobile',
+            'Client delivery and iteration'
         ],
-        links: {
-            playstore: 'https://play.google.com/store/apps/details?id=com.MunchieGames.VanMakeover&hl=en_GB&gl=US'
-        },
+        links: {},
         featured: false
     }
 ];
