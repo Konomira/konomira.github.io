@@ -15,37 +15,9 @@
         height: 100vh;
         display: block;
       }
-      .back-to-portfolio {
-        position: fixed;
-        top: 1.5rem;
-        left: 1.5rem;
-        padding: 0.75rem 1.5rem;
-        background: #ff6b35;
-        color: white;
-        text-decoration: none;
-        border-radius: 25px;
-        font-weight: 600;
-        font-family: 'Outfit', 'Montserrat', sans-serif;
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        box-shadow: 0 4px 15px rgba(255, 107, 53, 0.5);
-        z-index: 1000;
-      }
-      .back-to-portfolio:hover {
-        background: #ff8555;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255, 107, 53, 0.6);
-      }
-      .back-to-portfolio::before {
-        content: '←';
-        font-size: 1.2rem;
-      }
     </style>
   </head>
   <body>
-    <a href="../index.html" class="back-to-portfolio">Portfolio</a>
     <canvas id="unity-canvas" tabindex="-1"></canvas>
     <script src="Build/Builds.loader.js"></script>
     <script>
