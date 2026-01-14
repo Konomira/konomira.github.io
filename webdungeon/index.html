@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebDungeon - Tower Defense Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem 0;
+            text-align: center;
+            border-bottom: 2px solid #0f3460;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #e94560;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .game-container {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            margin-bottom: 2rem;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .game-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 100%; /* 1:1 Aspect Ratio */
+            background: #000;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #unity-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-bar {
+            width: 80%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .loading-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e94560, #0f3460);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .content-section {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        h2 {
+            color: #e94560;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            color: #0f3460;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-card {
+            background: rgba(15, 52, 96, 0.3);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #e94560;
+        }
+
+        .feature-card h3 {
+            color: #e94560;
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+
+        .controls {
+            background: rgba(15, 52, 96, 0.2);
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        .controls strong {
+            color: #e94560;
+        }
+
+        ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            text-align: center;
+            border-top: 2px solid #0f3460;
+        }
+
+        .github-link {
+            color: #e94560;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .github-link:hover {
+            color: #ff6b6b;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .tagline {
+                font-size: 1rem;
+            }
+
+            .content-section {
+                padding: 1.5rem;
+            }
+
+            .game-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🛡WebDungeon</h1>
+        <p class="tagline">Defend your core from waves of invading heroes</p>
+    </header>
+
+    <main>
+        <div class="game-container">
+            <div class="game-wrapper">
+                <canvas id="unity-canvas"></canvas>
+                <div class="loading-overlay" id="loading-overlay">
+                    <h2>Loading Game...</h2>
+                    <div class="loading-bar">
+                        <div class="loading-fill" id="loading-fill"></div>
+                    </div>
+                    <p id="loading-text">0%</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>About the Game</h2>
+            <p>
+                WebDungeon is a strategic tower defense game with a twist - you're defending the dungeon! 
+                As the dungeon keeper, you must protect your core from waves of invading heroes using a variety 
+                of traps and defensive structures.
+            </p>
+            
+            <h3>Gameplay</h3>
+            <p>
+                Each match begins with a procedurally generated dungeon layout, creating unique strategic 
+                challenges every time. You'll have a preparation phase to place your initial defenses before 
+                the first wave begins. Between waves, you'll receive additional resources to expand your 
+                defenses and adapt to increasingly difficult enemy formations.
+            </p>
+
+            <div class="controls">
+                <strong>Controls:</strong>
+                <ul>
+                    <li><strong>1</strong> - Select Spike Trap (high damage, limited uses)</li>
+                    <li><strong>2</strong> - Select Slow Trap (reduces hero movement speed)</li>
+                    <li><strong>3</strong> - Select Blocker (blocks pathways, must be destroyed)</li>
+                    <li><strong>Left Click</strong> - Place selected trap</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Procedural Generation</h3>
+                    <p>Every dungeon is uniquely generated with rooms, corridors, and multiple spawn points, 
+                    ensuring no two games play the same.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>A* Pathfinding</h3>
+                    <p>Heroes use intelligent pathfinding to navigate to your core, adapting their routes 
+                    when blockers are placed or destroyed.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Resource Management</h3>
+                    <p>Traps are limited and refill between waves. Strategic placement and timing are 
+                    essential for survival.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Trap Durability System</h3>
+                    <p>Most traps have limited uses before breaking, forcing you to constantly adapt your 
+                    defensive strategy.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Dynamic Combat</h3>
+                    <p>Heroes will engage and destroy blockers in their path, creating evolving battlefield 
+                    conditions.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Wave-Based Difficulty</h3>
+                    <p>Each wave spawns more heroes than the last, with exponential scaling that tests your 
+                    strategic planning.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Technical Systems</h2>
+            <ul>
+                <li><strong>Dungeon Generation:</strong> BSP-based room generation with corridor connections</li>
+                <li><strong>Pathfinding:</strong> A* algorithm with blocker-aware routing</li>
+                <li><strong>Grid System:</strong> Tile-based placement and movement using Unity's Tilemap</li>
+                <li><strong>Event-Driven Architecture:</strong> Decoupled systems communicate via C# events</li>
+                <li><strong>Resource Management:</strong> Wave-based refill system with per-trap-type limits</li>
+                <li><strong>Combat System:</strong> Trigger-based trap activation with durability tracking</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <p>Built with Unity and C# | 
+        <a href="https://github.com/konomira/webdungeon" class="github-link">View on GitHub</a></p>
+    </footer>
+
+    <script>
+        // Unity WebGL loader
+        var canvas = document.querySelector("#unity-canvas");
+        var loadingOverlay = document.querySelector("#loading-overlay");
+        var loadingFill = document.querySelector("#loading-fill");
+        var loadingText = document.querySelector("#loading-text");
+
+        var buildUrl = "Build";
+        var loaderUrl = buildUrl + "/Builds.loader.js";
+        var config = {
+            dataUrl: buildUrl + "/Builds.data",
+            frameworkUrl: buildUrl + "/Builds.framework.js",
+            codeUrl: buildUrl + "/Builds.wasm",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "LewisWhiteman",
+            productName: "WebDungeon",
+            productVersion: "1.0",
+        };
+
+        var script = document.createElement("script");
+        script.src = loaderUrl;
+        script.onload = () => {
+            createUnityInstance(canvas, config, (progress) => {
+                var percent = Math.round(progress * 100);
+                loadingFill.style.width = percent + "%";
+                loadingText.textContent = percent + "%";
+            }).then((unityInstance) => {
+                loadingOverlay.style.display = "none";
+            }).catch((message) => {
+                alert("Failed to load game: " + message);
+            });
+        };
+        document.body.appendChild(script);
+    </script>
+</body>
+</html>
