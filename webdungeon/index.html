@@ -26,6 +26,36 @@
             padding: 2rem 0;
             text-align: center;
             border-bottom: 2px solid #0f3460;
+            position: relative;
+        }
+
+        .back-to-portfolio {
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: #ff6b35;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-family: 'Outfit', 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .back-to-portfolio:hover {
+            background: #ff8555;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .back-to-portfolio::before {
+            content: '←';
+            font-size: 1.2rem;
         }
 
         h1 {
@@ -203,11 +233,22 @@
             .game-container {
                 padding: 1rem;
             }
+
+            .back-to-portfolio {
+                position: static;
+                display: inline-flex;
+                margin-bottom: 1rem;
+            }
+
+            header {
+                padding-top: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <header>
+        <a href="../index.html" class="back-to-portfolio">Portfolio</a>
         <h1>🛡WebDungeon</h1>
         <p class="tagline">Defend your core from waves of invading heroes</p>
     </header>

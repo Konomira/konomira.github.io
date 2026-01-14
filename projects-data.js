@@ -56,7 +56,7 @@ const projectsData = [
             'Responsive web design'
         ],
         links: {
-            demo: './solitaire/index.html',
+            demo: './solitaire/play.html',
             github: null
         },
         playable: true,
