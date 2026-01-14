@@ -1,1 +1,0 @@
-# konomira.github.io

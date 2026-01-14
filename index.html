@@ -1,69 +1,225 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lewis Whiteman - Unity Developer & Technical Lead</title>
+    <meta name="description" content="Unity developer specializing in 3D applications, game development, and technical leadership. Available for freelance projects.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
 
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Lewis Whiteman</h1>
+            <p class="hero-subtitle">Unity Developer & Technical Lead</p>
+            <p class="hero-description">
+                Building immersive 3D applications and games. 5+ years leading complex Unity projects.
+            </p>
+            <div class="hero-cta">
+                <a href="#contact" class="btn btn-primary">Get In Touch</a>
+                <a href="#categories" class="btn btn-secondary">View Work</a>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <span>Scroll to explore</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"/>
+            </svg>
+        </div>
+    </section>
 
-<html>
-	<head>
-		<link href="style.css" rel="stylesheet" type="text/css">
-	</head>
-	<body>
-		<title>
-		Lewis Whiteman's Portfolio
-		</title>
-		<div class="center">
-			<div class="wrapper">
-				<a class="box box0" name="github" href="https://github.com/Konomira" target="_blank">
-					<div class="show-on-hover"></div>
-					<h2 class="box-title">Github</h2>
-				</a>
+    <!-- Categories Section -->
+    <section class="categories" id="categories">
+        <div class="container">
+            <h2 class="section-title">What are you looking for?</h2>
+            <p class="section-subtitle">Choose a category to see relevant projects, or browse everything below.</p>
+            
+            <div class="category-grid">
+                <div class="category-card" data-category="games">
+                    <div class="category-icon">🎮</div>
+                    <h3>Game Development</h3>
+                    <p>Interactive gameplay, mechanics, and polished player experiences</p>
+                    <ul class="category-tags">
+                        <li>Game Logic</li>
+                        <li>UI/UX</li>
+                        <li>Procedural Generation</li>
+                    </ul>
+                </div>
 
-				<a class="box box1 slide slide0" name="itch" href="https://konomira.itch.io/" target="_blank">
-					<div class="show-on-hover"></div>
-					<h2 class="box-title">itch.io</h2>
-				</a>
+                <div class="category-card" data-category="3d">
+                    <div class="category-icon">🎨</div>
+                    <h3>3D Tools & Visualization</h3>
+                    <p>Complex 3D applications, editors, and interactive visualizations</p>
+                    <ul class="category-tags">
+                        <li>3D Modeling</li>
+                        <li>WebGL</li>
+                        <li>Real-time Rendering</li>
+                    </ul>
+                </div>
 
-				<a class="box box2" name="discord" href="https://discordapp.com/users/122916391299973123" target="_blank">
-					<div class="show-on-hover"></div>
-					<h2 class="box-title">Discord</h2>
-				</a>
+                <div class="category-card" data-category="leadership">
+                    <div class="category-icon">👥</div>
+                    <h3>Technical Leadership</h3>
+                    <p>Team management, architecture, and long-term project delivery</p>
+                    <ul class="category-tags">
+                        <li>Team Lead</li>
+                        <li>Architecture</li>
+                        <li>Client Communication</li>
+                    </ul>
+                </div>
 
-				<a class="box box3" name="projects" href="/projects.html">
-					<div class="show-on-hover"></div>
-					<h2 class="box-title">Projects</h2>
-				</a>
+                <div class="category-card" data-category="all">
+                    <div class="category-icon">📂</div>
+                    <h3>View All Projects</h3>
+                    <p>Browse my complete portfolio without filters</p>
+                    <ul class="category-tags">
+                        <li>Everything</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-				<a class="box box4" name="upwork" href="https://www.upwork.com/freelancers/~0193a18e10dc2ede8f" target="_blank">
-					<div class="show-on-hover"></div>
-					<h2 class="box-title">Upwork</h2>
-				</a>
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <div class="projects-header">
+                <h2 class="section-title">Projects</h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="games">Games</button>
+                    <button class="filter-btn" data-filter="3d">3D Tools</button>
+                    <button class="filter-btn" data-filter="leadership">Leadership</button>
+                </div>
+            </div>
 
-				<a class="box box5" name="about" href="/about.html">
-					<div class="show-on-hover"></div>
-					<h2 class="box-title">Lewis Whiteman</h2>
-				</a>
+            <div class="projects-grid" id="projectsGrid">
+                <!-- Projects will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </section>
 
-				<a class="box box6" name="linkedin" href="https://www.linkedin.com/in/lewiswhiteman/" target="_blank">
-					<div class="show-on-hover"></div>
-					<h2 class="box-title">LinkedIn</h2>
-				</a>
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-content">
+                <h2 class="section-title">About</h2>
+                <div class="about-text">
+                    <p>
+                        I'm a Unity developer and technical lead specializing in complex 3D applications and game development. 
+                        With a BSc in Games and Applications Development and years of professional experience, I've led teams 
+                        through challenging technical projects from conception to delivery.
+                    </p>
+                    <p>
+                        Most recently, I spent 5 years as team lead and lead programmer on a sophisticated 3D interior design 
+                        application, managing both technical architecture and team coordination. This experience taught me how 
+                        to balance innovation with reliability, and how to deliver complex software that users love.
+                    </p>
+                    <p>
+                        I'm passionate about creating polished, performant applications and believe in rapid prototyping to 
+                        validate ideas quickly. Whether you need a game prototype, a 3D tool, or technical leadership for 
+                        your project, I bring both hands-on expertise and strategic thinking to the table.
+                    </p>
+                </div>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3>Core Technologies</h3>
+                        <ul>
+                            <li>Unity3D / C#</li>
+                            <li>WebGL</li>
+                            <li>3D Graphics & Rendering</li>
+                            <li>Mobile (iOS/Android)</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Specializations</h3>
+                        <ul>
+                            <li>UI/UX Development</li>
+                            <li>Procedural Generation</li>
+                            <li>Game Architecture</li>
+                            <li>Performance Optimization</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Leadership</h3>
+                        <ul>
+                            <li>Team Management</li>
+                            <li>Technical Architecture</li>
+                            <li>Client Communication</li>
+                            <li>Agile Development</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-			</div>
-		</div>
-		<script>
-			var slideIndex = 0;
-			showSlides();
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Let's Work Together</h2>
+            <p class="section-subtitle">Available for freelance projects. Get in touch to discuss your needs.</p>
+            
+            <div class="contact-grid">
+                <a href="mailto:lewiswhiteman@gmail.com" class="contact-card">
+                    <div class="contact-icon">✉️</div>
+                    <h3>Email</h3>
+                    <p>lewiswhiteman@gmail.com</p>
+                </a>
 
-			function showSlides() 
-			{
-				var slide = document.getElementsByClassName("slide");
-				if (slideIndex > 2) {slideIndex = 0}    
-				slide[0].classList.remove("slide0");
-				slide[0].classList.remove("slide1");
-				slide[0].classList.remove("slide2");
-				slide[0].classList.add("slide" + (slideIndex).toString());
-				slideIndex++;
-				setTimeout(showSlides, 3500); // Change image every 2 seconds
-			}
-		</script>
-	</body>
+                <a href="https://www.upwork.com/freelancers/~0193a18e10dc2ede8f" target="_blank" rel="noopener" class="contact-card">
+                    <div class="contact-icon">💼</div>
+                    <h3>Upwork</h3>
+                    <p>View my profile & reviews</p>
+                </a>
+
+                <a href="https://www.linkedin.com/in/lewiswhiteman/" target="_blank" rel="noopener" class="contact-card">
+                    <div class="contact-icon">🔗</div>
+                    <h3>LinkedIn</h3>
+                    <p>Connect professionally</p>
+                </a>
+
+                <a href="https://github.com/Konomira" target="_blank" rel="noopener" class="contact-card">
+                    <div class="contact-icon">🐙</div>
+                    <h3>GitHub</h3>
+                    <p>Browse my code</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Lewis Whiteman. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://github.com/Konomira" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://konomira.itch.io/" target="_blank" rel="noopener">itch.io</a>
+                <a href="https://www.linkedin.com/in/lewiswhiteman/" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="projects-data.js"></script>
+    <script src="script.js"></script>
+</body>
 </html>
