@@ -62,6 +62,27 @@ const projectsData = [
         playable: true,
         featured: true
     },
+	{
+        id: 'crystallinerunner',
+        title: 'Crystalline Runner',
+        category: ['games', '3D'],
+        description: 'Vibrant neon endless runner inspired by subway surfers',
+        tags: ['Unity', 'WebGL', 'Game Logic', 'UI/UX'],
+        technologies: 'Unity, C#, WebGL, UI System',
+        role: 'Solo Developer',
+        highlights: [
+            'Custom URP Shaders',
+            'Procedural level generation',
+            'Original Soundtrack',
+            'Optimised for web performance'
+        ],
+        links: {
+            demo: './crystallinerunner/#',
+            github: null
+        },
+        playable: true,
+        featured: true
+    },
     {
         id: 'shoejackcity',
         title: 'ShoeJack City',
