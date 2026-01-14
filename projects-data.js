@@ -39,7 +39,7 @@ const projectsData = [
             github: null // Add if you want to link to repo
         },
         playable: true,
-        featured: true
+        featured: false
     },
     {
         id: 'solitaire',
@@ -60,7 +60,7 @@ const projectsData = [
             github: null
         },
         playable: true,
-        featured: true
+        featured: false
     },
 	{
         id: 'crystallinerunner',
@@ -81,7 +81,7 @@ const projectsData = [
             github: null
         },
         playable: true,
-        featured: true
+        featured: false
     },
     {
         id: 'shoejackcity',
