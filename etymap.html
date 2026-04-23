@@ -290,15 +290,115 @@ function confirmGuess(){
 
 function shareResult(){
   if(!lastScore||!currentPuzzle)return;
-  const num=getPuzzleNum();
-  const hint=hintUsed?' (hint: '+hintUsed+')':'';
-  const text='Etymap #'+num+' 🌍\n"'+currentPuzzle.translation+'"\n\n'+scoreBar(lastScore.total)+'\n'+lastScore.total.toLocaleString()+' / 5,000'+hint+'\n\nPlay at etymap.com';
-  navigator.clipboard.writeText(text).then(()=>{
-    const t=document.getElementById('share-toast');
-    t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),2000);
-  });
+  const W=600,H=320;
+  const canvas=document.createElement('canvas');
+  canvas.width=W*2; canvas.height=H*2;
+  const ctx=canvas.getContext('2d');
+  ctx.scale(2,2);
+
+  // Background
+  ctx.fillStyle='#0f1117';
+  ctx.fillRect(0,0,W,H);
+
+  // Top accent stripe
+  const stripe=ctx.createLinearGradient(0,0,W,0);
+  stripe.addColorStop(0,'#4ade9e'); stripe.addColorStop(1,'#60a5fa');
+  ctx.fillStyle=stripe; ctx.fillRect(0,0,W,3);
+
+  // Card inner bg
+  ctx.fillStyle='#181c27';
+  ctx.beginPath(); ctx.roundRect(20,20,W-40,H-40,10); ctx.fill();
+
+  // Logo
+  ctx.font='bold 15px sans-serif';
+  ctx.fillStyle='#e8eaf0'; ctx.textAlign='left';
+  ctx.fillText('etym',32,50);
+  const lw=ctx.measureText('etym').width;
+  ctx.fillStyle='#4ade9e';
+  ctx.fillText('ap',32+lw,50);
+
+  // Puzzle number top right
+  const numLabel=mode==='daily'?'#'+getPuzzleNum():'Practice';
+  ctx.font='12px monospace';
+  ctx.fillStyle='#4a4f60'; ctx.textAlign='right';
+  ctx.fillText(numLabel,W-32,50);
+
+  // Divider
+  ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(32,62); ctx.lineTo(W-32,62); ctx.stroke();
+
+  // Subheading
+  ctx.font='13px sans-serif'; ctx.fillStyle='#8b90a0'; ctx.textAlign='left';
+  ctx.fillText('What place name means\u2026',32,82);
+
+  // Translation clue — wrap if needed
+  ctx.font='italic 26px sans-serif'; ctx.fillStyle='#e8eaf0';
+  const clue='\u201c'+currentPuzzle.translation+'\u201d';
+  const maxW=W-64;
+  let words=clue.split(' '), line='', cy=114;
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(ctx.measureText(test).width>maxW&&line){ ctx.fillText(line,32,cy); line=w; cy+=34; }
+    else { line=test; }
+  }
+  ctx.fillText(line,32,cy);
+
+  // Score blocks
+  const barY=H-80;
+  const filled=Math.round((lastScore.total/5000)*5);
+  for(let i=0;i<5;i++){
+    ctx.fillStyle=i<filled?'#4ade9e':'#1e2333';
+    ctx.beginPath(); ctx.roundRect(32+i*28,barY,22,22,4); ctx.fill();
+  }
+
+  // Score number
+  const scoreStr=lastScore.total.toLocaleString();
+  ctx.font='bold 22px monospace'; ctx.fillStyle='#4ade9e'; ctx.textAlign='left';
+  ctx.fillText(scoreStr,32+5*28+12,barY+17);
+  const scoreW=ctx.measureText(scoreStr+'  ').width;
+  ctx.font='12px monospace'; ctx.fillStyle='#4a4f60';
+  ctx.fillText('/ 5,000',32+5*28+12+scoreW,barY+17);
+
+  // Distance line
+  const kmStr=lastScore.km<=50?'Bullseye!':
+    (lastScore.km<10?lastScore.km.toFixed(1):Math.round(lastScore.km).toLocaleString())+' km off';
+  const hintNote=hintUsed?' \u00b7 hint used':'';
+  ctx.font='12px sans-serif'; ctx.fillStyle='#8b90a0';
+  ctx.fillText('\uD83D\uDCCD '+kmStr+hintNote,32,barY+42);
+
+  // URL bottom right
+  ctx.font='bold 12px sans-serif'; ctx.fillStyle='#4ade9e'; ctx.textAlign='right';
+  ctx.fillText('konomira.github.io/etymap.html',W-32,H-28);
+
+  // Bottom accent stripe
+  ctx.fillStyle=stripe; ctx.fillRect(0,H-3,W,3);
+
+  canvas.toBlob(blob=>{
+    if(!blob)return;
+    const file=new File([blob],'etymap-'+numLabel+'.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      navigator.share({
+        title:'Etymap '+numLabel,
+        text:'\u201c'+currentPuzzle.translation+'\u201d \u2014 can you find it?',
+        url:'https://konomira.github.io/etymap.html',
+        files:[file]
+      }).catch(()=>downloadCard(canvas,numLabel));
+    } else {
+      downloadCard(canvas,numLabel);
+    }
+  },'image/png');
 }
+
+function downloadCard(canvas,label){
+  const a=document.createElement('a');
+  a.href=canvas.toDataURL('image/png');
+  a.download='etymap-'+label+'.png'; a.click();
+  const t=document.getElementById('share-toast');
+  t.textContent='Card saved \u2013 share it!';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
 
 function loadPuzzle(idx){
   currentPuzzle=PUZZLES[idx];
