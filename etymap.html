@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etymap</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface2: #1e2333;
+    --border: rgba(255,255,255,0.08);
+    --accent: #4ade9e;
+    --accent2: #60a5fa;
+    --warn: #f59e0b;
+    --danger: #f87171;
+    --text: #e8eaf0;
+    --text2: #8b90a0;
+    --text3: #4a4f60;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* TOP BAR */
+  #topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    height: 52px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    z-index: 1000;
+  }
+
+  #logo {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  #logo span { color: var(--accent); }
+
+  #mode-toggle {
+    display: flex;
+    gap: 4px;
+    background: var(--bg);
+    padding: 3px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .mode-btn {
+    padding: 5px 14px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: none;
+    color: var(--text2);
+    letter-spacing: 0.3px;
+  }
+  .mode-btn.active {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  #date-label {
+    font-size: 12px;
+    color: var(--text3);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* MAIN LAYOUT */
+  #main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: 320px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    z-index: 100;
+  }
+
+  #puzzle-section {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 10px;
+  }
+
+  #translation-display {
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+
+  #translation-display em {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  #place-type {
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 0;
+  }
+
+  /* HINTS */
+  #hints-section {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #hint-status {
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 10px;
+  }
+
+  #hint-buttons {
+    display: flex;
+    gap: 8px;
+  }
+
+  .hint-btn {
+    flex: 1;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--text2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .hint-btn:hover:not(:disabled) {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    background: rgba(96,165,250,0.06);
+  }
+  .hint-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .hint-btn .cost {
+    display: block;
+    font-size: 10px;
+    color: var(--danger);
+    margin-top: 2px;
+    font-family: 'DM Mono', monospace;
+  }
+  #hint-reveal {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: rgba(96,165,250,0.08);
+    border: 1px solid rgba(96,165,250,0.2);
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--accent2);
+    display: none;
+  }
+
+  /* SCORE */
+  #score-section {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #score-display {
+    font-size: 42px;
+    font-weight: 300;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  #score-display span { color: var(--accent); }
+
+  #score-breakdown {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'DM Mono', monospace;
+    min-height: 16px;
+  }
+
+  /* GUESS BUTTON */
+  #action-section {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #guess-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    color: #0a1a12;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.2px;
+  }
+  #guess-btn:hover:not(:disabled) {
+    background: #6ee7b3;
+    transform: translateY(-1px);
+  }
+  #guess-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  #pin-instruction {
+    font-size: 12px;
+    color: var(--text3);
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* RESULT */
+  #result-section {
+    padding: 20px;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  #result-place {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  #result-detail {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+  }
+  .result-row .label { color: var(--text3); }
+  .result-row .val { color: var(--text); }
+  .result-row .val.good { color: var(--accent); }
+  .result-row .val.bad { color: var(--danger); }
+
+  #next-btn {
+    width: 100%;
+    padding: 11px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 4px;
+  }
+  #next-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* MAP */
+  #map {
+    flex: 1;
+    position: relative;
+  }
+
+  /* Custom marker */
+  .pin-marker {
+    width: 16px;
+    height: 16px;
+    background: var(--accent);
+    border: 2px solid white;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+
+  .answer-marker {
+    width: 16px;
+    height: 16px;
+    background: var(--danger);
+    border: 2px solid white;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+
+  /* Leaflet overrides */
+  .leaflet-container {
+    background: #1a1f2e !important;
+    cursor: crosshair !important;
+  }
+  .leaflet-control-zoom a {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+  }
+  .leaflet-control-zoom a:hover {
+    background: var(--surface2) !important;
+  }
+
+  /* Distance line pulse */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in { animation: fadeInUp 0.3s ease forwards; }
+
+  /* Score counter animation */
+  @keyframes countUp {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .score-pop { animation: countUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+  #compass-hint {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+    min-height: 16px;
+  }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="logo">etym<span>ap</span></div>
+  <div id="mode-toggle">
+    <button class="mode-btn active" onclick="setMode('daily')">Daily</button>
+    <button class="mode-btn" onclick="setMode('practice')">Practice</button>
+  </div>
+  <div id="date-label"></div>
+</div>
+
+<div id="main">
+  <div id="sidebar">
+
+    <div id="puzzle-section">
+      <div class="section-label">Translate the place</div>
+      <div id="translation-display">Loading...</div>
+      <div id="place-type"></div>
+    </div>
+
+    <div id="hints-section">
+      <div class="section-label">Hints</div>
+      <div id="hint-status">One hint allowed per round</div>
+      <div id="hint-buttons">
+        <button class="hint-btn" id="btn-continent" onclick="useHint('continent')">
+          Continent
+          <span class="cost">−150 pts</span>
+        </button>
+        <button class="hint-btn" id="btn-country" onclick="useHint('country')">
+          Country
+          <span class="cost">−500 pts</span>
+        </button>
+      </div>
+      <div id="hint-reveal"></div>
+    </div>
+
+    <div id="score-section">
+      <div class="section-label">Score</div>
+      <div id="score-display"><span>—</span></div>
+      <div id="score-breakdown"></div>
+      <div id="compass-hint"></div>
+    </div>
+
+    <div id="action-section">
+      <button id="guess-btn" disabled onclick="submitGuess()">Drop Pin to Guess</button>
+      <div id="pin-instruction">Click anywhere on the map to place your pin</div>
+    </div>
+
+    <div id="result-section">
+      <div id="result-place"></div>
+      <div id="result-detail"></div>
+      <div id="result-rows"></div>
+      <button id="next-btn" onclick="nextPuzzle()">Next puzzle →</button>
+    </div>
+
+  </div>
+
+  <div id="map"></div>
+</div>
+
+<script>
+// ============================================================
+// PUZZLE DATA — 40 curated place name etymologies
+// ============================================================
+const PUZZLES = [
+  { place: "Reykjavik", translation: "Smoky Bay", country: "Iceland", continent: "Europe", lat: 64.1355, lng: -21.8954, type: "Capital city" },
+  { place: "Singapore", translation: "Lion City", country: "Singapore", continent: "Asia", lat: 1.3521, lng: 103.8198, type: "City-state" },
+  { place: "Montevideo", translation: "I saw the mountain", country: "Uruguay", continent: "South America", lat: -34.9011, lng: -56.1645, type: "Capital city" },
+  { place: "Khartoum", translation: "End of the elephant's trunk", country: "Sudan", continent: "Africa", lat: 15.5007, lng: 32.5599, type: "Capital city" },
+  { place: "Barcelona", translation: "Land of Barca (son of lightning)", country: "Spain", continent: "Europe", lat: 41.3851, lng: 2.1734, type: "City" },
+  { place: "Mozambique", translation: "Lord of the island", country: "Mozambique", continent: "Africa", lat: -25.9692, lng: 32.5732, type: "Country & capital" },
+  { place: "Toronto", translation: "Where there are trees standing in the water", country: "Canada", continent: "North America", lat: 43.6532, lng: -79.3832, type: "City" },
+  { place: "Canberra", translation: "Meeting place", country: "Australia", continent: "Oceania", lat: -35.2809, lng: 149.1300, type: "Capital city" },
+  { place: "Kathmandu", translation: "Temple made of wood", country: "Nepal", continent: "Asia", lat: 27.7172, lng: 85.3240, type: "Capital city" },
+  { place: "Addis Ababa", translation: "New flower", country: "Ethiopia", continent: "Africa", lat: 9.0320, lng: 38.7469, type: "Capital city" },
+  { place: "Buenos Aires", translation: "Good airs / fair winds", country: "Argentina", continent: "South America", lat: -34.6037, lng: -58.3816, type: "Capital city" },
+  { place: "Helsinki", translation: "Rapid of the Hels tribe", country: "Finland", continent: "Europe", lat: 60.1699, lng: 24.9384, type: "Capital city" },
+  { place: "Nairobi", translation: "Cool water", country: "Kenya", continent: "Africa", lat: -1.2921, lng: 36.8219, type: "Capital city" },
+  { place: "Wellington", translation: "Settlement of Weolingtun (wealthy estate)", country: "New Zealand", continent: "Oceania", lat: -41.2865, lng: 174.7762, type: "Capital city" },
+  { place: "Kuala Lumpur", translation: "Muddy confluence", country: "Malaysia", continent: "Asia", lat: 3.1390, lng: 101.6869, type: "Capital city" },
+  { place: "Zagreb", translation: "Behind the hill", country: "Croatia", continent: "Europe", lat: 45.8150, lng: 15.9819, type: "Capital city" },
+  { place: "Ulaanbaatar", translation: "Red hero", country: "Mongolia", continent: "Asia", lat: 47.8864, lng: 106.9057, type: "Capital city" },
+  { place: "Islamabad", translation: "City of Islam", country: "Pakistan", continent: "Asia", lat: 33.7294, lng: 73.0931, type: "Capital city" },
+  { place: "Dar es Salaam", translation: "Haven of peace", country: "Tanzania", continent: "Africa", lat: -6.7924, lng: 39.2083, type: "City" },
+  { place: "Baku", translation: "City of winds", country: "Azerbaijan", continent: "Asia", lat: 40.4093, lng: 49.8671, type: "Capital city" },
+  { place: "Oslo", translation: "Mouth of the Lo river", country: "Norway", continent: "Europe", lat: 59.9139, lng: 10.7522, type: "Capital city" },
+  { place: "Tashkent", translation: "City of stone", country: "Uzbekistan", continent: "Asia", lat: 41.2995, lng: 69.2401, type: "Capital city" },
+  { place: "Phnom Penh", translation: "Hill of plenty", country: "Cambodia", continent: "Asia", lat: 11.5564, lng: 104.9282, type: "Capital city" },
+  { place: "Ouagadougou", translation: "You are welcome here at home with us", country: "Burkina Faso", continent: "Africa", lat: 12.3714, lng: -1.5197, type: "Capital city" },
+  { place: "Montevideo", translation: "I saw the mountain", country: "Uruguay", continent: "South America", lat: -34.9011, lng: -56.1645, type: "Capital city" },
+  { place: "Dushanbe", translation: "Monday", country: "Tajikistan", continent: "Asia", lat: 38.5598, lng: 68.7870, type: "Capital city" },
+  { place: "Bamako", translation: "Crocodile river", country: "Mali", continent: "Africa", lat: 12.6392, lng: -8.0029, type: "Capital city" },
+  { place: "Caracas", translation: "Beloved land", country: "Venezuela", continent: "South America", lat: 10.4806, lng: -66.9036, type: "Capital city" },
+  { place: "Nicosia", translation: "Victory city", country: "Cyprus", continent: "Europe", lat: 35.1856, lng: 33.3823, type: "Capital city" },
+  { place: "Kinshasa", translation: "The place that swallowed the island", country: "DR Congo", continent: "Africa", lat: -4.4419, lng: 15.2663, type: "Capital city" },
+  { place: "Yerevan", translation: "It appeared", country: "Armenia", continent: "Asia", lat: 40.1872, lng: 44.5152, type: "Capital city" },
+  { place: "Muscat", translation: "Hidden anchorage", country: "Oman", continent: "Asia", lat: 23.5880, lng: 58.3829, type: "Capital city" },
+  { place: "Libreville", translation: "Free town", country: "Gabon", continent: "Africa", lat: 0.4162, lng: 9.4673, type: "Capital city" },
+  { place: "Paramaribo", translation: "Timber town by the water", country: "Suriname", continent: "South America", lat: 5.8520, lng: -55.2038, type: "Capital city" },
+  { place: "Vilnius", translation: "City of the Vilnia river", country: "Lithuania", continent: "Europe", lat: 54.6872, lng: 25.2797, type: "Capital city" },
+  { place: "Nuku'alofa", translation: "Abode of love", country: "Tonga", continent: "Oceania", lat: -21.1394, lng: -175.2048, type: "Capital city" },
+  { place: "Ashgabat", translation: "City of love", country: "Turkmenistan", continent: "Asia", lat: 37.9601, lng: 58.3261, type: "Capital city" },
+  { place: "Nassau", translation: "Wet land", country: "Bahamas", continent: "North America", lat: 25.0480, lng: -77.3554, type: "Capital city" },
+  { place: "Antananarivo", translation: "City of the thousand warriors", country: "Madagascar", continent: "Africa", lat: -18.8792, lng: 47.5079, type: "Capital city" },
+  { place: "Thimphu", translation: "Flat stone", country: "Bhutan", continent: "Asia", lat: 27.4728, lng: 89.6393, type: "Capital city" },
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let map, playerMarker, answerMarker, distanceLine;
+let currentPuzzle = null;
+let pinLat = null, pinLng = null;
+let hintUsed = null;
+let guessSubmitted = false;
+let mode = 'daily';
+let usedIndices = new Set();
+let dailyIndex = null;
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  // Set date
+  const today = new Date();
+  document.getElementById('date-label').textContent =
+    today.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+  // Init map
+  map = L.map('map', {
+    center: [20, 10],
+    zoom: 2,
+    minZoom: 2,
+    maxZoom: 10,
+    zoomControl: true,
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap © CARTO',
+    subdomains: 'abcd',
+    maxZoom: 19,
+  }).addTo(map);
+
+  map.on('click', onMapClick);
+
+  loadPuzzle();
+}
+
+function getTodayString() {
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+}
+
+function hashDate(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = Math.imul(31, h) + str.charCodeAt(i) | 0;
+  return Math.abs(h);
+}
+
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  usedIndices = new Set();
+  if (mode === 'daily') dailyIndex = null;
+  loadPuzzle();
+}
+
+function loadPuzzle() {
+  // Reset state
+  pinLat = null; pinLng = null;
+  hintUsed = null;
+  guessSubmitted = false;
+
+  if (playerMarker) { map.removeLayer(playerMarker); playerMarker = null; }
+  if (answerMarker) { map.removeLayer(answerMarker); answerMarker = null; }
+  if (distanceLine) { map.removeLayer(distanceLine); distanceLine = null; }
+
+  document.getElementById('guess-btn').disabled = true;
+  document.getElementById('guess-btn').textContent = 'Drop Pin to Guess';
+  document.getElementById('pin-instruction').style.display = 'block';
+  document.getElementById('score-display').innerHTML = '<span>—</span>';
+  document.getElementById('score-breakdown').textContent = '';
+  document.getElementById('compass-hint').textContent = '';
+  document.getElementById('hint-reveal').style.display = 'none';
+  document.getElementById('hint-reveal').textContent = '';
+  document.getElementById('btn-continent').disabled = false;
+  document.getElementById('btn-country').disabled = false;
+  document.getElementById('hint-status').textContent = 'One hint allowed per round';
+  document.getElementById('result-section').style.display = 'none';
+  document.getElementById('action-section').style.display = 'block';
+  document.getElementById('hints-section').style.display = 'block';
+  document.getElementById('score-section').style.display = 'block';
+
+  // Pick puzzle
+  let idx;
+  if (mode === 'daily') {
+    if (dailyIndex === null) {
+      dailyIndex = hashDate(getTodayString()) % PUZZLES.length;
+    }
+    idx = dailyIndex;
+  } else {
+    // Practice - random, avoid repeats until exhausted
+    if (usedIndices.size >= PUZZLES.length) usedIndices.clear();
+    do { idx = Math.floor(Math.random() * PUZZLES.length); } while (usedIndices.has(idx));
+    usedIndices.add(idx);
+  }
+
+  currentPuzzle = PUZZLES[idx];
+
+  // Render translation with highlighted words
+  const words = currentPuzzle.translation.split(' ');
+  const highlighted = words.map((w, i) =>
+    i === 0 ? `<em>${w}</em>` : w
+  ).join(' ');
+
+  document.getElementById('translation-display').innerHTML = `"${highlighted}"`;
+  document.getElementById('place-type').textContent = currentPuzzle.type;
+
+  // Reset map view
+  map.setView([20, 10], 2);
+}
+
+// ============================================================
+// MAP INTERACTION
+// ============================================================
+function onMapClick(e) {
+  if (guessSubmitted) return;
+
+  pinLat = e.latlng.lat;
+  pinLng = e.latlng.lng;
+
+  if (playerMarker) map.removeLayer(playerMarker);
+
+  const pinIcon = L.divIcon({
+    className: '',
+    html: '<div class="pin-marker"></div>',
+    iconSize: [16, 16],
+    iconAnchor: [8, 16],
+  });
+
+  playerMarker = L.marker([pinLat, pinLng], { icon: pinIcon }).addTo(map);
+
+  document.getElementById('guess-btn').disabled = false;
+  document.getElementById('guess-btn').textContent = 'Confirm Guess';
+}
+
+// ============================================================
+// HINTS
+// ============================================================
+function useHint(type) {
+  if (hintUsed || guessSubmitted) return;
+  hintUsed = type;
+
+  document.getElementById('btn-continent').disabled = true;
+  document.getElementById('btn-country').disabled = true;
+
+  const hintEl = document.getElementById('hint-reveal');
+  hintEl.style.display = 'block';
+
+  if (type === 'continent') {
+    hintEl.textContent = `📍 Continent: ${currentPuzzle.continent}`;
+    document.getElementById('hint-status').textContent = '−150 pts · Continent revealed';
+  } else {
+    hintEl.textContent = `🌍 Country: ${currentPuzzle.country}`;
+    document.getElementById('hint-status').textContent = '−500 pts · Country revealed';
+  }
+}
+
+// ============================================================
+// SCORING
+// ============================================================
+function haversineKm(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 +
+    Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function getBearing(lat1, lng1, lat2, lng2) {
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const y = Math.sin(dLng) * Math.cos(lat2 * Math.PI / 180);
+  const x = Math.cos(lat1 * Math.PI / 180) * Math.sin(lat2 * Math.PI / 180) -
+    Math.sin(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.cos(dLng);
+  const bearing = Math.atan2(y, x) * 180 / Math.PI;
+  return (bearing + 360) % 360;
+}
+
+function bearingToArrow(deg) {
+  const dirs = ['↑ N','↗ NE','→ E','↘ SE','↓ S','↙ SW','← W','↖ NW'];
+  return dirs[Math.round(deg / 45) % 8];
+}
+
+function getCountryFromPin(lat, lng) {
+  // Rough country detection via bounding boxes for scoring
+  // We'll use a simpler approach: just compare distance to answer
+  return null; // handled via distance threshold
+}
+
+function calcScore(distKm, correctCountry) {
+  const MAX_DIST = 10000;
+  const distScore = Math.max(0, Math.round(4500 * (1 - Math.min(distKm, MAX_DIST) / MAX_DIST)));
+  const countryBonus = correctCountry ? 500 : 0;
+  const hintPenalty = hintUsed === 'continent' ? 150 : hintUsed === 'country' ? 500 : 0;
+  return { distScore, countryBonus, hintPenalty, total: Math.max(0, distScore + countryBonus - hintPenalty) };
+}
+
+// ============================================================
+// SUBMIT GUESS
+// ============================================================
+function submitGuess() {
+  if (!pinLat || guessSubmitted) return;
+  guessSubmitted = true;
+
+  const { lat, lng } = { lat: currentPuzzle.lat, lng: currentPuzzle.lng };
+  const distKm = haversineKm(pinLat, pinLng, lat, lng);
+  const bearing = getBearing(pinLat, pinLng, lat, lng);
+
+  // Country check: within 50km = correct country assumed
+  // For a real app we'd use reverse geocoding; here we use distance as proxy
+  // and a curated country bounding box check
+  const correctCountry = distKm < 300; // simplified: within 300km treated as correct country
+  // Actually use the hint-revealed country if they used the country hint
+  const definitiveCountry = hintUsed === 'country' ? true : correctCountry;
+
+  const score = calcScore(distKm, definitiveCountry);
+
+  // Draw answer marker
+  const answerIcon = L.divIcon({
+    className: '',
+    html: '<div class="answer-marker"></div>',
+    iconSize: [16, 16],
+    iconAnchor: [8, 16],
+  });
+  answerMarker = L.marker([lat, lng], { icon: answerIcon })
+    .bindPopup(`<strong>${currentPuzzle.place}</strong><br>${currentPuzzle.country}`)
+    .addTo(map);
+  answerMarker.openPopup();
+
+  // Draw line
+  distanceLine = L.polyline([[pinLat, pinLng], [lat, lng]], {
+    color: '#f59e0b',
+    weight: 1.5,
+    dashArray: '6 4',
+    opacity: 0.6,
+  }).addTo(map);
+
+  // Fit map
+  map.fitBounds([[pinLat, pinLng], [lat, lng]], { padding: [60, 60] });
+
+  // Animate score
+  const scoreEl = document.getElementById('score-display');
+  scoreEl.classList.add('score-pop');
+  scoreEl.innerHTML = `<span>${score.total.toLocaleString()}</span>`;
+  setTimeout(() => scoreEl.classList.remove('score-pop'), 500);
+
+  // Breakdown
+  const parts = [];
+  parts.push(`${score.distScore.toLocaleString()} distance`);
+  if (score.countryBonus) parts.push(`+${score.countryBonus} country`);
+  if (score.hintPenalty) parts.push(`−${score.hintPenalty} hint`);
+  document.getElementById('score-breakdown').textContent = parts.join(' · ');
+  document.getElementById('compass-hint').textContent =
+    distKm < 50 ? '🎯 Bullseye!' : `${Math.round(distKm).toLocaleString()} km · ${bearingToArrow(bearing)}`;
+
+  // Show result panel
+  showResult(distKm, score);
+}
+
+function showResult(distKm, score) {
+  document.getElementById('action-section').style.display = 'none';
+  document.getElementById('hints-section').style.display = 'none';
+
+  const resultSection = document.getElementById('result-section');
+  resultSection.style.display = 'flex';
+  resultSection.classList.add('animate-in');
+
+  document.getElementById('result-place').textContent = currentPuzzle.place;
+  document.getElementById('result-detail').textContent =
+    `${currentPuzzle.translation} · ${currentPuzzle.country}`;
+
+  const rows = [
+    { label: 'Distance', val: distKm < 50 ? 'Within 50 km' : `${Math.round(distKm).toLocaleString()} km`, good: distKm < 200 },
+    { label: 'Distance score', val: score.distScore.toLocaleString(), good: score.distScore > 2000 },
+    { label: 'Country bonus', val: score.countryBonus ? `+${score.countryBonus}` : '—', good: !!score.countryBonus },
+    { label: 'Hint penalty', val: score.hintPenalty ? `−${score.hintPenalty}` : 'None', good: !score.hintPenalty },
+    { label: 'Total', val: score.total.toLocaleString(), good: score.total > 3000 },
+  ];
+
+  document.getElementById('result-rows').innerHTML = rows.map(r => `
+    <div class="result-row">
+      <span class="label">${r.label}</span>
+      <span class="val ${r.good ? 'good' : ''}">${r.val}</span>
+    </div>
+  `).join('');
+
+  // In daily mode, hide next button
+  if (mode === 'daily') {
+    document.getElementById('next-btn').textContent = 'Switch to Practice to play more →';
+    document.getElementById('next-btn').onclick = () => {
+      document.querySelector('.mode-btn:nth-child(2)').click();
+    };
+  }
+}
+
+function nextPuzzle() {
+  loadPuzzle();
+}
+
+// ============================================================
+// START
+// ============================================================
+window.addEventListener('load', init);
+</script>
+</body>
+</html>
