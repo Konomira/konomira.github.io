@@ -143,18 +143,6 @@
       padding: 10px 16px;
     }
 
-    #score-section {
-      padding: 10px 16px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 16px;
-    }
-
-    #score-section .section-label {
-      display: none;
-    }
-
     #score-display {
       font-size: 28px;
       margin-bottom: 0;
@@ -283,8 +271,9 @@
 
   /* SCORE */
   #score-section {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
   }
 
   #score-display {
@@ -494,18 +483,18 @@
       <div id="hint-reveal"></div>
     </div>
 
-    <div id="score-section">
-      <div class="section-label">Score</div>
-      <div id="score-display"><span>—</span></div>
-      <div id="score-right">
-        <div id="score-breakdown"></div>
-        <div id="compass-hint"></div>
-      </div>
-    </div>
-
     <div id="action-section">
-      <button id="guess-btn" disabled onclick="submitGuess()">Drop Pin to Guess</button>
-      <div id="pin-instruction">Click anywhere on the map to place your pin</div>
+      <div id="pre-guess">
+        <button id="guess-btn" disabled onclick="submitGuess()">Drop Pin to Guess</button>
+        <div id="pin-instruction">Click anywhere on the map to place your pin</div>
+      </div>
+      <div id="score-section" style="display:none;">
+        <div id="score-display"><span>—</span></div>
+        <div id="score-right">
+          <div id="score-breakdown"></div>
+          <div id="compass-hint"></div>
+        </div>
+      </div>
     </div>
 
     <div id="result-section">
@@ -652,7 +641,8 @@ function loadPuzzle() {
   document.getElementById('result-section').style.display = 'none';
   document.getElementById('action-section').style.display = 'block';
   document.getElementById('hints-section').style.display = 'block';
-  document.getElementById('score-section').style.display = 'block';
+  document.getElementById('pre-guess').style.display = 'block';
+  document.getElementById('score-section').style.display = 'none';
 
   // Pick puzzle
   let idx;
@@ -832,7 +822,8 @@ function submitGuess() {
 }
 
 function showResult(distKm, score) {
-  document.getElementById('action-section').style.display = 'none';
+  document.getElementById('pre-guess').style.display = 'none';
+  document.getElementById('score-section').style.display = 'flex';
   document.getElementById('hints-section').style.display = 'none';
 
   const resultSection = document.getElementById('result-section');
