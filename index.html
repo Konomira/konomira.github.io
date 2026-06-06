@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lewis Whiteman - Unity Developer & Technical Lead</title>
+<title>Lewis Whiteman — Unity Developer & Technical Lead</title>
 <meta name="description" content="Unity developer and technical lead with 10+ years of commercial experience. Specialist in 3D applications, networked games, and long-term client delivery.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -111,32 +111,52 @@ nav.scrolled { padding: 0.75rem 3rem; }
   border-bottom: 1px solid var(--border);
 }
 
-/* Animated grid background */
-.hero-grid {
+/* Hero background image */
+.hero-bg {
   position: absolute; inset: 0;
-  background-image:
-    linear-gradient(var(--faint) 1px, transparent 1px),
-    linear-gradient(90deg, var(--faint) 1px, transparent 1px);
-  background-size: 60px 60px;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
-  opacity: 0.5;
-  animation: gridPulse 8s ease-in-out infinite;
+  overflow: hidden;
+  z-index: 0;
 }
-@keyframes gridPulse {
-  0%, 100% { opacity: 0.35; }
-  50%       { opacity: 0.55; }
+.hero-bg-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  opacity: 0.7;
+  filter: saturate(0.6) brightness(0.7);
+  transform: scale(1.04);
+  animation: heroZoom 18s ease-in-out infinite alternate;
+}
+@keyframes heroZoom {
+  from { transform: scale(1.04); }
+  to   { transform: scale(1.0); }
+}
+.hero-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom,
+      rgba(13,12,9,0.2)  0%,
+      rgba(13,12,9,0.1)  25%,
+      rgba(13,12,9,0.5)  60%,
+      rgba(13,12,9,0.97) 100%
+    ),
+    linear-gradient(to right,
+      rgba(13,12,9,0.65) 0%,
+      transparent 55%
+    );
 }
 
-/* Warm glow */
+/* Warm glow — sits above the bg */
 .hero-glow {
   position: absolute;
   width: 700px; height: 500px;
   top: 10%; right: -10%;
-  background: radial-gradient(ellipse, rgba(200,146,42,0.12) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(200,146,42,0.10) 0%, transparent 70%);
   pointer-events: none;
+  z-index: 1;
 }
 
-.hero-content { position: relative; z-index: 2; max-width: 900px; }
+.hero-content { position: relative; z-index: 3; max-width: 900px; }
 
 .hero-eyebrow {
   font-family: var(--mono);
@@ -357,7 +377,7 @@ nav.scrolled { padding: 0.75rem 3rem; }
   margin-bottom: 0;
 }
 
-/* Expandable detail panel - desktop hover */
+/* Expandable detail panel — desktop hover */
 .tl-detail {
   max-height: 0;
   overflow: hidden;
@@ -678,7 +698,9 @@ footer {
 
 <!-- HERO -->
 <section class="hero" id="hero">
-  <div class="hero-grid"></div>
+  <div class="hero-bg">
+    <img class="hero-bg-img" src="img/hero-bg.jpg" alt="">
+  </div>
   <div class="hero-glow"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">Unity Developer &amp; Technical Lead</div>
@@ -737,6 +759,12 @@ footer {
             <p class="tl-desc">
               Core technical work: a full snapshot-based save/load and history system, MongoDB cloud save integration, a real-time modular fitting system with 3D UI, and sustained WebGL performance optimisation to keep the tool fast in the browser.
             </p>
+            <div class="tl-images">
+              <img class="tl-img" src="img/vanspace-01.gif" alt="VanSpace 3D - interior design view">
+              <img class="tl-img" src="img/vanspace-02.webp" alt="VanSpace 3D - material system">
+              <img class="tl-img" src="img/vanspace-03.webp" alt="VanSpace 3D - object placement">
+              <img class="tl-img" src="img/vanspace-04.gif" alt="VanSpace 3D - variations">
+            </div>
             <div class="tl-chips">
               <span class="chip">Unity3D</span>
               <span class="chip">WebGL</span>
@@ -772,6 +800,13 @@ footer {
             <p class="tl-desc">
               Shipped a match-based mobile puzzle game with van customisation meta-progression, live on iOS and Android. Responsible for touch UX implementation, cross-platform performance, and client-facing delivery, all running concurrently alongside the Vanspace3D engagement.
             </p>
+            <div class="tl-images">
+              <img class="tl-img" src="img/vanlife-01.webp" alt="VanLife Makeover - gameplay">
+              <img class="tl-img" src="img/vanlife-02.webp" alt="VanLife Makeover - progression">
+              <img class="tl-img" src="img/vanlife-03.png" alt="VanLife Makeover - screen">
+              <img class="tl-img" src="img/vanlife-04.webp" alt="VanLife Makeover - screen">
+              <img class="tl-img" src="img/vanlife-05.webp" alt="VanLife Makeover - screen">
+            </div>
             <div class="tl-chips">
               <span class="chip">Unity</span>
               <span class="chip">iOS</span>
@@ -803,6 +838,11 @@ footer {
             <p class="tl-desc">
               Led a development team of eleven at a games outsourcing studio, shipping a range of client projects across multiple genres and platforms. Notable titles included a shared-space multiplayer VR zombie wave shooter and several 2D action games. Strong client relationship management led directly to the six-year VanSpace 3D contract.
             </p>
+            <div class="tl-images">
+              <img class="tl-img" src="img/kostudios-01.webp" alt="KO Studio Games - project">
+              <img class="tl-img" src="img/kostudios-02.jpg" alt="KO Studio Games - project">
+              <img class="tl-img" src="img/kostudios-03.jpg" alt="KO Studio Games - project">
+            </div>
             <div class="tl-chips">
               <span class="chip">Unity</span>
               <span class="chip">VR</span>
