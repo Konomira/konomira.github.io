@@ -1,225 +1,1018 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lewis Whiteman - Unity Developer & Technical Lead</title>
-    <meta name="description" content="Unity developer specializing in 3D applications, game development, and technical leadership. Available for freelance projects.">
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lewis Whiteman — Unity Developer & Technical Lead</title>
+<meta name="description" content="Unity developer and technical lead with 10+ years of commercial experience. Specialist in 3D applications, networked games, and long-term client delivery.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Space+Grotesk:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & ROOT ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0d0c09;
+  --surface:   #141310;
+  --surface2:  #1c1a15;
+  --border:    #2a2720;
+  --border2:   #3a3629;
+
+  --text:      #f0ebe0;
+  --muted:     #7a7568;
+  --faint:     #3d3a30;
+
+  --amber:     #c8922a;
+  --amber-lt:  #e8b45a;
+  --amber-dim: #6b4e18;
+  --rust:      #b04a22;
+  --rust-lt:   #d4673a;
+
+  --serif:  'Playfair Display', Georgia, serif;
+  --sans:   'Space Grotesk', system-ui, sans-serif;
+  --mono:   'Space Mono', monospace;
+
+  --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* ─── SCROLLBAR ────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--amber-dim); border-radius: 2px; }
+
+/* ─── NAV ──────────────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.1rem 3rem;
+  background: rgba(13,12,9,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  transition: padding 0.3s var(--ease);
+}
+nav.scrolled { padding: 0.75rem 3rem; }
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--amber);
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex; gap: 2.5rem; list-style: none;
+}
+.nav-links a {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--amber-lt); }
+
+.nav-cta {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--amber);
+  border: 1px solid var(--amber-dim);
+  padding: 0.45rem 1rem;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-cta:hover { background: var(--amber); color: var(--bg); }
+
+/* ─── HERO ─────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 9rem 3rem 5rem;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Hero background image */
+.hero-bg {
+  position: absolute; inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+.hero-bg-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  opacity: 0.45;
+  filter: saturate(0.6) brightness(0.7);
+  transform: scale(1.04);
+  animation: heroZoom 18s ease-in-out infinite alternate;
+}
+@keyframes heroZoom {
+  from { transform: scale(1.04); }
+  to   { transform: scale(1.0); }
+}
+/* Two gradient passes: bottom fade for text legibility, left vignette for left-anchored layout */
+.hero-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom,
+      rgba(13,12,9,0.2)  0%,
+      rgba(13,12,9,0.1)  25%,
+      rgba(13,12,9,0.5)  60%,
+      rgba(13,12,9,0.97) 100%
+    ),
+    linear-gradient(to right,
+      rgba(13,12,9,0.65) 0%,
+      transparent 55%
+    );
+}
+
+/* Warm glow — sits above the bg */
+.hero-glow {
+  position: absolute;
+  width: 700px; height: 500px;
+  top: 10%; right: -10%;
+  background: radial-gradient(ellipse, rgba(200,146,42,0.10) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-content { position: relative; z-index: 3; max-width: 900px; }
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 32px; height: 1px;
+  background: var(--amber);
+}
+
+.hero-name {
+  font-family: var(--serif);
+  font-size: clamp(3.5rem, 10vw, 8.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.75rem;
+}
+.hero-name .line2 {
+  font-style: italic;
+  color: var(--amber);
+  -webkit-text-stroke: 1px var(--amber);
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: 300;
+  color: var(--muted);
+  max-width: 52ch;
+  line-height: 1.65;
+  margin-bottom: 3.5rem;
+}
+.hero-sub strong { color: var(--text); font-weight: 500; }
+
+.hero-stats {
+  display: flex;
+  gap: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 2.5rem;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  padding: 0 3rem 0 0;
+  margin-right: 3rem;
+  border-right: 1px solid var(--border);
+}
+.hero-stat:last-child { border-right: none; }
+.stat-n {
+  display: block;
+  font-family: var(--mono);
+  font-size: 3rem;
+  color: var(--amber-lt);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+.stat-l {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 2rem; right: 3rem;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 2;
+}
+.hero-scroll::after {
+  content: '';
+  display: block;
+  width: 1px; height: 48px;
+  background: linear-gradient(var(--amber-dim), transparent);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%, 100% { opacity: 0.4; transform: scaleY(1); }
+  50%       { opacity: 1;   transform: scaleY(0.6); }
+}
+
+/* ─── SECTION SHARED ───────────────────────────────────────────── */
+.section { padding: 7rem 3rem; border-bottom: 1px solid var(--border); }
+
+.section-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.section-tag::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--amber);
+  display: block;
+}
+
+.section-heading {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.05;
+  margin-bottom: 4rem;
+}
+
+/* ─── TIMELINE ──────────────────────────────────────────────────── */
+.timeline {
+  position: relative;
+}
+
+/* The vertical rule */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 160px;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(var(--border), var(--amber-dim) 40%, var(--border));
+}
+
+.tl-entry {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  position: relative;
+  cursor: default;
+}
+.tl-entry + .tl-entry { margin-top: 0; }
+
+/* The dot on the line */
+.tl-entry::after {
+  content: '';
+  position: absolute;
+  left: 156px; top: 2.8rem;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 1.5px solid var(--amber-dim);
+  transition: background 0.25s, border-color 0.25s, transform 0.25s;
+  z-index: 2;
+}
+.tl-entry:hover::after,
+.tl-entry.active::after {
+  background: var(--amber);
+  border-color: var(--amber);
+  transform: scale(1.4);
+}
+
+.tl-left {
+  padding: 2.5rem 2rem 2.5rem 0;
+  text-align: right;
+}
+.tl-period {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.tl-duration {
+  display: block;
+  font-size: 10px;
+  color: var(--amber-dim);
+  margin-top: 0.3rem;
+  letter-spacing: 0.08em;
+}
+
+.tl-right {
+  padding: 2.5rem 0 2.5rem 3rem;
+  border-top: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.tl-entry:first-child .tl-right { border-top: none; }
+
+.tl-company {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rust-lt);
+  margin-bottom: 0.35rem;
+}
+
+.tl-title {
+  font-family: var(--serif);
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  line-height: 1.1;
+  margin-bottom: 0.6rem;
+  transition: color 0.2s;
+}
+.tl-entry:hover .tl-title { color: var(--amber-lt); }
+
+.tl-role {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--muted);
+  font-family: var(--mono);
+  margin-bottom: 0;
+}
+
+/* Expandable detail panel — desktop hover */
+.tl-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.55s var(--ease), opacity 0.4s ease;
+  opacity: 0;
+}
+.tl-entry:hover .tl-detail,
+.tl-entry.active .tl-detail {
+  max-height: 600px;
+  opacity: 1;
+}
+
+.tl-detail-inner {
+  padding-top: 1.25rem;
+}
+
+.tl-desc {
+  font-size: 0.92rem;
+  color: rgba(240,235,224,0.72);
+  line-height: 1.8;
+  max-width: 68ch;
+  margin-bottom: 1.25rem;
+}
+
+.tl-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+.chip {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--amber-dim);
+  border: 1px solid var(--border2);
+  padding: 3px 9px;
+  background: var(--surface);
+  transition: border-color 0.2s, color 0.2s;
+}
+.chip:hover { border-color: var(--amber-dim); color: var(--amber); }
+
+.tl-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--amber);
+  border-bottom: 1px solid var(--amber-dim);
+  padding-bottom: 1px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.tl-link:hover { color: var(--amber-lt); border-color: var(--amber-lt); }
+.tl-link svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+/* Highlight bar on featured entry */
+.tl-entry.featured .tl-right {
+  border-left: 2px solid var(--amber-dim);
+  padding-left: calc(3rem - 2px);
+  background: linear-gradient(90deg, rgba(200,146,42,0.04), transparent 60%);
+}
+.tl-entry.featured::after {
+  background: var(--amber-dim);
+  border-color: var(--amber);
+  width: 11px; height: 11px;
+  left: 155px;
+}
+
+/* Mobile: always show detail */
+@media (max-width: 768px) {
+  .tl-detail {
+    max-height: none !important;
+    opacity: 1 !important;
+    overflow: visible;
+  }
+  .timeline::before { left: 0; }
+  .tl-entry { grid-template-columns: 1fr; }
+  .tl-entry::after { display: none; }
+  .tl-left {
+    text-align: left;
+    padding: 2rem 0 0;
+    border-top: 1px solid var(--border);
+  }
+  .tl-entry:first-child .tl-left { border-top: none; }
+  .tl-right {
+    border-top: none;
+    padding: 0.75rem 0 2rem;
+  }
+  .tl-entry.featured .tl-right {
+    border-left: none;
+    padding-left: 0;
+    background: none;
+  }
+}
+
+/* ─── SKILLS ───────────────────────────────────────────────────── */
+.skills-section { background: var(--surface); }
+
+.skills-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.skill-col {
+  background: var(--surface);
+  padding: 2.5rem;
+}
+
+.skill-col-head {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.skill-col-head::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border2);
+}
+
+.skill-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.skill-row:last-child { border-bottom: none; }
+.skill-row-name { color: var(--text); font-weight: 400; }
+.skill-dots {
+  display: flex;
+  gap: 4px;
+}
+
+@media (max-width: 768px) {
+  .skills-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── ABOUT ────────────────────────────────────────────────────── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.about-text p {
+  font-size: 0.97rem;
+  color: rgba(240,235,224,0.75);
+  line-height: 1.85;
+  margin-bottom: 1.25rem;
+}
+.about-text p:last-child { margin-bottom: 0; }
+
+.about-aside {}
+.aside-item {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 1rem;
+  align-start: start;
+}
+.aside-item:first-child { border-top: 1px solid var(--border); }
+.aside-key {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-top: 2px;
+}
+.aside-val {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+}
+.aside-val a { color: var(--amber); border-bottom: 1px solid var(--amber-dim); }
+.aside-val a:hover { color: var(--amber-lt); border-color: var(--amber-lt); }
+
+@media (max-width: 768px) {
+  .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+}
+
+/* ─── CONTACT ──────────────────────────────────────────────────── */
+.contact-section {
+  background: var(--surface);
+  border-bottom: none;
+}
+
+.contact-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.contact-headline {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  line-height: 1.05;
+  max-width: 14ch;
+}
+.contact-headline em {
+  font-style: italic;
+  color: var(--amber);
+}
+
+.contact-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.contact-email {
+  font-family: var(--serif);
+  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  color: var(--amber-lt);
+  border-bottom: 1px solid var(--amber-dim);
+  transition: color 0.2s, border-color 0.2s;
+}
+.contact-email:hover { color: var(--text); border-color: var(--text); }
+
+.contact-links {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.contact-links a {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.contact-links a:hover { color: var(--amber); }
+
+/* ─── FOOTER ───────────────────────────────────────────────────── */
+footer {
+  padding: 1.5rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* ─── MOBILE NAV ───────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.25rem; }
+  nav.scrolled { padding: 0.75rem 1.25rem; }
+  .nav-links { display: none; }
+  .hero { padding: 7rem 1.25rem 4rem; }
+  .hero-stats { gap: 0; flex-wrap: wrap; }
+  .hero-stat { padding: 0 1.5rem 0 0; margin-right: 1.5rem; margin-bottom: 1rem; }
+  .hero-scroll { display: none; }
+  .section { padding: 4.5rem 1.25rem; }
+  .skill-col { padding: 1.75rem; }
+  footer { padding: 1.5rem 1.25rem; }
+  .contact-section { padding: 4.5rem 1.25rem; }
+  nav > .nav-cta { font-size: 10px; padding: 0.4rem 0.75rem; }
+}
+
+/* ─── ENTRY ANIMATIONS ──────────────────────────────────────────── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
 </head>
 <body>
-    <!-- Theme Toggle -->
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="12" y1="1" x2="12" y2="3"/>
-            <line x1="12" y1="21" x2="12" y2="23"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-            <line x1="1" y1="12" x2="3" y2="12"/>
-            <line x1="21" y1="12" x2="23" y2="12"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-        </svg>
-        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-    </button>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Lewis Whiteman</h1>
-            <p class="hero-subtitle">Unity Developer & Technical Lead</p>
-            <p class="hero-description">
-                Building immersive 3D applications and games. 10+ years leading complex Unity projects.
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">LW / Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:lewiswhiteman@gmail.com" class="nav-cta">Hire me</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <!-- HERO BG: swap src for your own image, e.g. src="img/hero.jpg" -->
+  <div class="hero-bg">
+    <img class="hero-bg-img" src="img/hero-bg.jpg" alt="">
+  </div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Unity Developer &amp; Technical Lead</div>
+    <h1 class="hero-name">
+      Lewis<br>
+      <span class="line2">Whiteman</span>
+    </h1>
+    <p class="hero-sub">
+      I build <strong>real-time 3D applications and games</strong> that ship and stay shipped.
+      Six years leading VanSpace 3D. Eleven developers led. Three platforms delivered.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="stat-n">10+</span>
+        <span class="stat-l">Years experience</span>
+      </div>
+      <div class="hero-stat">
+        <span class="stat-n">6</span>
+        <span class="stat-l">Years at VanSpace 3D</span>
+      </div>
+      <div class="hero-stat">
+        <span class="stat-n">11</span>
+        <span class="stat-l">Devs led</span>
+      </div>
+      <div class="hero-stat" style="border-right:none; padding-right:0; margin-right:0;">
+        <span class="stat-n">3</span>
+        <span class="stat-l">Platforms shipped</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- WORK TIMELINE -->
+<section class="section" id="work">
+  <div class="section-tag">Selected work</div>
+  <h2 class="section-heading">Career timeline</h2>
+
+  <div class="timeline">
+
+    <!-- VanSpace 3D -->
+    <div class="tl-entry featured fade-up">
+      <div class="tl-left">
+        <div class="tl-period">2020 – 2026</div>
+        <span class="tl-duration">6 years</span>
+      </div>
+      <div class="tl-right">
+        <div class="tl-company">Vanspace B.V.</div>
+        <h3 class="tl-title">VanSpace 3D</h3>
+        <div class="tl-role">Team Lead &amp; Lead Programmer</div>
+        <div class="tl-detail">
+          <div class="tl-detail-inner">
+            <p class="tl-desc">
+              A browser-based 3D van interior design tool used daily by van conversion enthusiasts and professionals worldwide. Joined as junior programmer and grew into a team lead role, owning technical architecture, developer coordination, client communication, and six years of sustained feature delivery.
             </p>
-            <div class="hero-cta">
-                <a href="#contact" class="btn btn-primary">Get In Touch</a>
-                <a href="#categories" class="btn btn-secondary">View Work</a>
+            <p class="tl-desc">
+              Core technical work: a full snapshot-based save/load and history system, MongoDB cloud save integration, a real-time modular fitting system with 3D UI, and sustained WebGL performance optimisation to keep the tool fast in the browser.
+            </p>
+            <div class="tl-chips">
+              <span class="chip">Unity3D</span>
+              <span class="chip">WebGL</span>
+              <span class="chip">C#</span>
+              <span class="chip">Shaders</span>
+              <span class="chip">MongoDB</span>
+              <span class="chip">3D UI</span>
+              <span class="chip">Snapshot Systems</span>
+              <span class="chip">Team Lead</span>
+              <span class="chip">Client Delivery</span>
             </div>
+            <a href="https://www.vanspace3d.com/" class="tl-link" target="_blank" rel="noopener">
+              Visit vanspace3d.com
+              <svg viewBox="0 0 12 12"><path d="M3 9L9 3M9 3H5M9 3v4"/></svg>
+            </a>
+          </div>
         </div>
-        <div class="hero-scroll">
-            <span>Scroll to explore</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"/>
-            </svg>
-        </div>
-    </section>
+      </div>
+    </div>
 
-    <!-- Categories Section -->
-    <section class="categories" id="categories">
-        <div class="container">
-            <h2 class="section-title">What are you looking for?</h2>
-            <p class="section-subtitle">Choose a category to see relevant projects, or browse everything below.</p>
-            
-            <div class="category-grid">
-                <div class="category-card" data-category="games">
-                    <div class="category-icon">🎮</div>
-                    <h3>Game Development</h3>
-                    <p>Interactive gameplay, mechanics, and polished player experiences</p>
-                    <ul class="category-tags">
-                        <li>Game Logic</li>
-                        <li>UI/UX</li>
-                        <li>Procedural Generation</li>
-                    </ul>
-                </div>
-
-                <div class="category-card" data-category="3d">
-                    <div class="category-icon">🎨</div>
-                    <h3>3D Tools & Visualization</h3>
-                    <p>Complex 3D applications, editors, and interactive visualizations</p>
-                    <ul class="category-tags">
-                        <li>3D Modeling</li>
-                        <li>WebGL</li>
-                        <li>Real-time Rendering</li>
-                    </ul>
-                </div>
-
-                <div class="category-card" data-category="leadership">
-                    <div class="category-icon">👥</div>
-                    <h3>Technical Leadership</h3>
-                    <p>Team management, architecture, and long-term project delivery</p>
-                    <ul class="category-tags">
-                        <li>Team Lead</li>
-                        <li>Architecture</li>
-                        <li>Client Communication</li>
-                    </ul>
-                </div>
-
-                <div class="category-card" data-category="all">
-                    <div class="category-icon">📂</div>
-                    <h3>View All Projects</h3>
-                    <p>Browse my complete portfolio without filters</p>
-                    <ul class="category-tags">
-                        <li>Everything</li>
-                    </ul>
-                </div>
+    <!-- VanLife Makeover -->
+    <div class="tl-entry fade-up">
+      <div class="tl-left">
+        <div class="tl-period">2023 – 2024</div>
+        <span class="tl-duration">1 year</span>
+      </div>
+      <div class="tl-right">
+        <div class="tl-company">Munchie Games</div>
+        <h3 class="tl-title">VanLife Makeover</h3>
+        <div class="tl-role">UX Programmer</div>
+        <div class="tl-detail">
+          <div class="tl-detail-inner">
+            <p class="tl-desc">
+              Shipped a match-based mobile puzzle game with van customisation meta-progression, live on iOS and Android. Responsible for touch UX implementation, cross-platform performance, and client-facing delivery, all running concurrently alongside the Vanspace3D engagement.
+            </p>
+            <div class="tl-chips">
+              <span class="chip">Unity</span>
+              <span class="chip">iOS</span>
+              <span class="chip">Android</span>
+              <span class="chip">Puzzle Mechanics</span>
+              <span class="chip">Meta-progression</span>
+              <span class="chip">Touch UX</span>
+              <span class="chip">In-App Purchases</span>
+              <span class="chip">Firebase</span>
+              <span class="chip">AdMob</span>
             </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
 
-    <!-- Projects Section -->
-    <section class="projects" id="projects">
-        <div class="container">
-            <div class="projects-header">
-                <h2 class="section-title">Projects</h2>
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="games">Games</button>
-                    <button class="filter-btn" data-filter="3d">3D Tools</button>
-                    <button class="filter-btn" data-filter="leadership">Leadership</button>
-                </div>
+    <!-- Kando -->
+    <div class="tl-entry fade-up">
+      <div class="tl-left">
+        <div class="tl-period">2020 – 2024</div>
+        <span class="tl-duration">4 years</span>
+      </div>
+      <div class="tl-right">
+        <div class="tl-company">KO Studio Games</div>
+        <h3 class="tl-title">Lead Programmer</h3>
+        <div class="tl-role">Studio &amp; Outsourcing - 11-person team</div>
+        <div class="tl-detail">
+          <div class="tl-detail-inner">
+            <p class="tl-desc">
+              Led a development team of eleven at a games outsourcing studio, shipping a range of client projects across multiple genres and platforms. Notable titles included a shared-space multiplayer VR zombie wave shooter and several 2D action games. Strong client relationship management led directly to the six-year VanSpace 3D contract.
+            </p>
+            <div class="tl-chips">
+              <span class="chip">Unity</span>
+              <span class="chip">VR</span>
+              <span class="chip">Multiplayer</span>
+              <span class="chip">Outsourcing</span>
+              <span class="chip">Team Lead</span>
+              <span class="chip">2D / 3D</span>
+              <span class="chip">Client Management</span>
             </div>
-
-            <div class="projects-grid" id="projectsGrid">
-                <!-- Projects will be inserted here by JavaScript -->
-            </div>
+            <a href="https://www.kostudiogames.com/" class="tl-link" target="_blank" rel="noopener">
+              Visit kostudiogames.com
+              <svg viewBox="0 0 12 12"><path d="M3 9L9 3M9 3H5M9 3v4"/></svg>
+            </a>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
 
-    <!-- About Section -->
-    <section class="about" id="about">
-        <div class="container">
-            <div class="about-content">
-                <h2 class="section-title">About</h2>
-                <div class="about-text">
-                    <p>
-                        I'm a Unity developer and technical lead specializing in complex 3D applications and game development. 
-                        With a BSc in Games and Applications Development and years of professional experience, I've led teams 
-                        through challenging technical projects from conception to delivery.
-                    </p>
-                    <p>
-                        Most recently, I spent 5 years as team lead and lead programmer on a sophisticated 3D interior design 
-                        application, managing both technical architecture and team coordination. This experience taught me how 
-                        to balance innovation with reliability, and how to deliver complex software that users love.
-                    </p>
-                    <p>
-                        I'm passionate about creating polished, performant applications and believe in rapid prototyping to 
-                        validate ideas quickly. Whether you need a game prototype, a 3D tool, or technical leadership for 
-                        your project, I bring both hands-on expertise and strategic thinking to the table.
-                    </p>
-                </div>
-                <div class="skills-grid">
-                    <div class="skill-category">
-                        <h3>Core Technologies</h3>
-                        <ul>
-                            <li>Unity3D / C#</li>
-                            <li>WebGL</li>
-                            <li>3D Graphics & Rendering</li>
-                            <li>Mobile (iOS/Android)</li>
-                        </ul>
-                    </div>
-                    <div class="skill-category">
-                        <h3>Specializations</h3>
-                        <ul>
-                            <li>UI/UX Development</li>
-                            <li>Procedural Generation</li>
-                            <li>Game Architecture</li>
-                            <li>Performance Optimization</li>
-                        </ul>
-                    </div>
-                    <div class="skill-category">
-                        <h3>Leadership</h3>
-                        <ul>
-                            <li>Team Management</li>
-                            <li>Technical Architecture</li>
-                            <li>Client Communication</li>
-                            <li>Agile Development</li>
-                        </ul>
-                    </div>
-                </div>
+    <!-- HexTTG -->
+    <div class="tl-entry fade-up">
+      <div class="tl-left">
+        <span class="tl-duration">Ongoing</span>
+      </div>
+      <div class="tl-right">
+        <div class="tl-company">Freelance Contract</div>
+        <h3 class="tl-title">HexTTG</h3>
+        <div class="tl-role">Solo Architect - Networked tactical game</div>
+        <div class="tl-detail">
+          <div class="tl-detail-inner">
+            <p class="tl-desc">
+              An online multiplayer networked hex-grid tactical game built with Mirror, demonstrating disciplined production-grade architecture: strict layer separation, 200+ passing unit tests, a full status effect system, simultaneous turn phases with snapshot/revert, and card cooldown tracking. Built in active collaboration with a client and game designer.
+            </p>
+            <div class="tl-chips">
+              <span class="chip">Mirror Networking</span>
+              <span class="chip">Hex Grid</span>
+              <span class="chip">C#</span>
+              <span class="chip">Unit Tests</span>
+              <span class="chip">AI Systems</span>
+              <span class="chip">Turn Architecture</span>
             </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
 
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <h2 class="section-title">Let's Work Together</h2>
-            <p class="section-subtitle">Available for freelance projects. Get in touch to discuss your needs.</p>
-            
-            <div class="contact-grid">
-                <a href="mailto:lewiswhiteman@gmail.com" class="contact-card">
-                    <div class="contact-icon">✉️</div>
-                    <h3>Email</h3>
-                    <p>lewiswhiteman@gmail.com</p>
-                </a>
+  </div>
+</section>
 
-                <a href="https://www.upwork.com/freelancers/~0193a18e10dc2ede8f" target="_blank" rel="noopener" class="contact-card">
-                    <div class="contact-icon">💼</div>
-                    <h3>Upwork</h3>
-                    <p>View my profile & reviews</p>
-                </a>
+<!-- SKILLS -->
+<section class="section skills-section" id="skills">
+  <div class="section-tag">Capabilities</div>
+  <h2 class="section-heading fade-up">Technical skills</h2>
 
-                <a href="https://www.linkedin.com/in/lewiswhiteman/" target="_blank" rel="noopener" class="contact-card">
-                    <div class="contact-icon">🔗</div>
-                    <h3>LinkedIn</h3>
-                    <p>Connect professionally</p>
-                </a>
+  <div class="skills-layout fade-up">
+    <div class="skill-col">
+      <div class="skill-col-head">Core tech</div>
+      <div class="skill-row"><span class="skill-row-name">Unity3D / C#</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div></div>
+      <div class="skill-row"><span class="skill-row-name">WebGL &amp; Performance</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot half"></div></div></div>
+      <div class="skill-row"><span class="skill-row-name">3D Systems &amp; Rendering</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot half"></div></div></div>
+      <div class="skill-row"><span class="skill-row-name">iOS &amp; Android</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div></div></div>
+      <div class="skill-row"><span class="skill-row-name">Mirror Networking</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div></div></div>
+      <div class="skill-row"><span class="skill-row-name">URP / Custom Shaders</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div></div></div>
+    </div>
+    <div class="skill-col">
+      <div class="skill-col-head">Specialisms</div>
+      <div class="skill-row"><span class="skill-row-name">Save &amp; History Systems</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div></div>
+      <div class="skill-row"><span class="skill-row-name">Game Architecture</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div></div>
+      <div class="skill-row"><span class="skill-row-name">A* &amp; Pathfinding</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div></div></div>
+      <div class="skill-row"><span class="skill-row-name">Procedural Generation</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot half"></div><div class="dot"></div></div></div>
+      <div class="skill-row"><span class="skill-row-name">Unit Testing (NUnit)</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div></div></div>
+      <div class="skill-row"><span class="skill-row-name">MongoDB / Cloud Save</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div><div class="dot"></div></div></div>
+    </div>
+    <div class="skill-col">
+      <div class="skill-col-head">Leadership</div>
+      <div class="skill-row"><span class="skill-row-name">Team Lead</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div></div>
+      <div class="skill-row"><span class="skill-row-name">Technical Architecture</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot half"></div></div></div>
+      <div class="skill-row"><span class="skill-row-name">Client Communication</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot"></div></div></div>
+      <div class="skill-row"><span class="skill-row-name">Long-term Delivery</span><div class="skill-dots"><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div></div></div>
+    </div>
+  </div>
+</section>
 
-                <a href="https://github.com/Konomira" target="_blank" rel="noopener" class="contact-card">
-                    <div class="contact-icon">🐙</div>
-                    <h3>GitHub</h3>
-                    <p>Browse my code</p>
-                </a>
-            </div>
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-tag">Background</div>
+  <h2 class="section-heading fade-up">About me</h2>
+  <div class="about-grid fade-up">
+    <div class="about-text">
+      <p>I'm a Unity developer and technical lead from Fife, Scotland, with over a decade of commercial experience building things that actually ship and stay shipped. My longest engagement was six years on VanSpace 3D, a product used daily by thousands of customers. That tenure shaped how I think about software: ownership, reliability, and long-term maintainability matter as much as technical ambition.</p>
+      <p>Before that I led 11 developers, artists, and designers at Kando Outsourcing across a range of client projects from VR multiplayer experiences to action games which built the broad foundation I draw on today. I care about the craft of it: clean architecture, testable systems, and code that a future developer (or future me) can actually understand.</p>
+      <p>I have a BSc in Computer Games Applications Development from the University of Abertay Dundee. Right now I'm actively expanding into backend development with ASP.NET Core, Entity Framework, and Azure, deliberately broadening beyond Unity.</p>
+    </div>
+    <div class="about-aside">
+      <div class="aside-item">
+        <div class="aside-key">Education</div>
+        <div class="aside-val">BSc Computer Games Applications Development<br>University of Abertay Dundee</div>
+      </div>
+      <div class="aside-item">
+        <div class="aside-key">Location</div>
+        <div class="aside-val">Fife, Scotland<br>Open to remote &amp; hybrid roles</div>
+      </div>
+      <div class="aside-item">
+        <div class="aside-key">Studying</div>
+        <div class="aside-val">ASP.NET Core · Entity Framework · Azure</div>
+      </div>
+      <div class="aside-item">
+        <div class="aside-key">Profiles</div>
+        <div class="aside-val">
+          <a href="https://github.com/Konomira" target="_blank" rel="noopener">github.com/Konomira</a><br>
+          <a href="https://konomira.itch.io/" target="_blank" rel="noopener">konomira.itch.io</a><br>
+          <a href="https://www.linkedin.com/in/lewiswhiteman/" target="_blank" rel="noopener">LinkedIn</a>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Lewis Whiteman. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="https://github.com/Konomira" target="_blank" rel="noopener">GitHub</a>
-                <a href="https://konomira.itch.io/" target="_blank" rel="noopener">itch.io</a>
-                <a href="https://www.linkedin.com/in/lewiswhiteman/" target="_blank" rel="noopener">LinkedIn</a>
-            </div>
-        </div>
-    </footer>
+<!-- CONTACT -->
+<section class="section contact-section" id="contact">
+  <div class="contact-inner">
+    <h2 class="contact-headline fade-up">
+      Let's build something <em>worth building.</em>
+    </h2>
+    <div class="contact-row fade-up">
+      <a href="mailto:lewiswhiteman@gmail.com" class="contact-email">lewiswhiteman@gmail.com</a>
+      <div class="contact-links">
+        <a href="https://www.linkedin.com/in/lewiswhiteman/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.upwork.com/freelancers/~0193a18e10dc2ede8f" target="_blank" rel="noopener">Upwork</a>
+        <a href="https://github.com/Konomira" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://konomira.itch.io/" target="_blank" rel="noopener">itch.io</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script src="projects-data.js"></script>
-    <script src="script.js"></script>
+<!-- FOOTER -->
+<footer>
+  <span class="footer-copy">Unity Developer · Technical Lead · Fife, Scotland</span>
+</footer>
+
+<script>
+// Nav shrink on scroll
+(function() {
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function() {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+})();
+
+// Scroll-triggered fade-up
+(function() {
+  var els = document.querySelectorAll('.fade-up');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('visible'); });
+    return;
+  }
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  els.forEach(function(el) { obs.observe(el); });
+})();
+
+// Timeline: touch/click toggle for mobile & keyboard users
+(function() {
+  var isMobile = function() { return window.innerWidth <= 768; };
+  var entries = document.querySelectorAll('.tl-entry');
+  entries.forEach(function(entry) {
+    entry.addEventListener('click', function() {
+      if (isMobile()) return; // mobile always visible
+      var isActive = entry.classList.contains('active');
+      entries.forEach(function(e) { e.classList.remove('active'); });
+      if (!isActive) entry.classList.add('active');
+    });
+    entry.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        entry.click();
+      }
+    });
+    entry.setAttribute('tabindex', '0');
+    entry.setAttribute('role', 'button');
+  });
+})();
+</script>
+
 </body>
 </html>
